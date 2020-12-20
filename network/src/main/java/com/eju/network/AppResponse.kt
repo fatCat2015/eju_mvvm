@@ -9,7 +9,7 @@ data class AppResponse<T>(
     val message:String?,
     val data:T?
 ){
-    fun isSuccess()=code=="SYS0aa00"
+    fun isSuccess()=code=="SYS000"
 
     val result :T get() {
         return code?.let {

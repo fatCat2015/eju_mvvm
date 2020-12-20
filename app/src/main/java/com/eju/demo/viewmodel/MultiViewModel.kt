@@ -6,10 +6,10 @@ import com.eju.architecture.base.BaseViewModel
 import com.eju.demo.api.DemoService
 import com.eju.demo.api.HelpDetail
 import com.eju.network.NetworkUtil
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
-import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.*
 import java.lang.Exception
+import java.lang.NullPointerException
+import kotlin.coroutines.CoroutineContext
 
 class MultiViewModel:BaseViewModel() {
 
@@ -28,18 +28,20 @@ class MultiViewModel:BaseViewModel() {
     }
 
     fun demo2(){
+        //todo async中的异常不会抛出 怎么处理
         execute({
-            try {
-                val onePartData0=async {
-                    NetworkUtil.getService(DemoService::class.java).getHelpDetail("58").result
-                }
-            }catch (e:Exception){
-                Log.i("sck220", "Exception111: ")
+            val onePartData0=async() {
+                NetworkUtil.getService(DemoService::class.java).getHelpDetail("58").result
             }
+            val onePartData1=async() {
+                NetworkUtil.getService(DemoService::class.java).getHelpDetail("58").result
+            }
+            onePartData0.await()
+            onePartData1.await()
 
         }){
             //接口并发执行 运行至此 接口都执行完毕
-//            neededData.postValue(it)
+            neededData.postValue(it)
         }
     }
 
