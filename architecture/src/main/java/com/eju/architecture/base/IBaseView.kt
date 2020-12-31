@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.fragment.app.Fragment
+import com.eju.architecture.ApiExceptionHandler
 import java.lang.Exception
 
 interface IBaseView {
@@ -19,19 +20,14 @@ interface IBaseView {
 
 }
 
-class IViewDefaultImpl(private val context: Context?): IBaseView {
-
-    constructor(fragment: Fragment):this(fragment.activity){
-
-    }
+class IViewDefaultImpl(private val obj:Any?): IBaseView {
 
     override fun toast(msg: String?) {
         Log.i("sck220", "toast: ${msg}")
     }
 
     override fun showError(exception: Exception?) {
-        exception?.printStackTrace()
-        Log.i("sck220", "showError: ${exception?.message}")
+        ApiExceptionHandler.handle(exception,obj)
     }
 
     override fun showLoading(msg: String?) {

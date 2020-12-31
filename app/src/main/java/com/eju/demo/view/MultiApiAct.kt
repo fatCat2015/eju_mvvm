@@ -8,6 +8,7 @@ import com.eju.architecture.getViewModel
 import com.eju.demo.R
 import com.eju.demo.viewmodel.MultiViewModel
 import kotlinx.android.synthetic.main.activity_cocurrent_api.*
+import kotlinx.android.synthetic.main.activity_test.*
 
 class MultiApiAct : BaseActivity<MultiViewModel>(R.layout.activity_cocurrent_api) {
 

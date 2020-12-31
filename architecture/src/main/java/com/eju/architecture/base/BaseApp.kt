@@ -6,7 +6,6 @@ import android.os.Bundle
 import com.eju.architecture.AppStateTracker
 import com.eju.architecture.BuildConfig
 import com.eju.architecture.currentProcessName
-import com.eju.architecture.util.ApiExceptionHandler
 import com.eju.network.NetworkUtil
 import com.imyyq.mvvm.app.AppActivityManager
 

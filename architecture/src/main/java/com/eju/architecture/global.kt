@@ -4,11 +4,14 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.res.Resources
 import android.os.Looper
+import android.util.Log
 import android.util.TypedValue
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.eju.architecture.base.BaseApp
+import kotlinx.coroutines.*
+import java.lang.Exception
 import java.lang.StringBuilder
 
 val application=BaseApp.application
@@ -53,5 +56,25 @@ fun <T> Collection<T>?.fold(separator:String=",",converter:((T)->String)?=null):
         stringBuilder.deleteCharAt(stringBuilder.length-1)
     }
     return stringBuilder.toString()
+}
+
+/**
+ * 启动一个协程 在协程中处理返回数据
+ */
+fun <T> launch(block: suspend CoroutineScope.() -> T,
+               resultCallback: ResultCallback<T>
+):Job {
+    return GlobalScope.launch (context = Dispatchers.Main){
+        try {
+            val data=block()
+            resultCallback.onSuccess(data)
+        } catch (e: Exception) {
+            if(!resultCallback.onFailed(e)){
+                ApiExceptionHandler.handle(e)
+            }
+        } finally {
+            resultCallback.onComplete()
+        }
+    }
 }
 

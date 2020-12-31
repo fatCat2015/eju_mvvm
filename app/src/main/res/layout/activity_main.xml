@@ -45,6 +45,13 @@
             android:text="列表"
             android:layout_height="wrap_content">
         </Button>
+        <Button
+            android:id="@+id/bt4"
+            android:layout_width="match_parent"
+            android:textAllCaps="false"
+            android:text="独立页面外调用接口"
+            android:layout_height="wrap_content">
+        </Button>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

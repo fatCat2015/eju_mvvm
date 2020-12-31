@@ -2,8 +2,10 @@ package com.eju.architecture.base
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.eju.architecture.getViewModel
+import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.observe
 import com.eju.architecture.util.ReflectUtil
 import java.lang.Exception

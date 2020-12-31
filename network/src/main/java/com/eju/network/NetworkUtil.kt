@@ -79,13 +79,8 @@ object NetworkUtil {
         }
     }
 
-    suspend fun <T> request(block: suspend() -> BaseResult<T>):BaseResult<T>{
-        try {
-            return block()
-        } catch (e: Exception) {
-            throw convertException(e)
-        }
-    }
+
+
 }
 
 

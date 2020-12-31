@@ -3,6 +3,7 @@ package com.eju.demo.view
 import android.content.Intent
 import android.os.Bundle
 import com.eju.architecture.base.SimpleActivity
+import com.eju.demo.IMContext
 import com.eju.demo.R
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,7 +20,9 @@ class MainActivity : SimpleActivity(R.layout.activity_main) {
         bt3.setOnClickListener {
             startActivity(Intent(this, ListActivity::class.java))
         }
-
+        bt4.setOnClickListener {
+            IMContext.loginIm()
+        }
     }
 
     override fun initData(savedInstanceState: Bundle?) {

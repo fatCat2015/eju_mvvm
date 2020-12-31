@@ -1,5 +1,6 @@
 package com.eju.architecture.base
 
+import android.util.Log
 import androidx.annotation.CallSuper
 import androidx.lifecycle.*
 import com.eju.network.ExceptionConverter

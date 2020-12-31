@@ -4,9 +4,7 @@ import androidx.lifecycle.*
 import com.eju.network.BaseResult
 import com.eju.network.ExceptionConverter
 import com.eju.network.NetworkUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import java.lang.Exception
 
 
@@ -37,6 +35,8 @@ fun <T> CoroutineScope.asyncSafely(block: suspend CoroutineScope.() -> T): Defer
         }
     }
 }
+
+
 
 
 
