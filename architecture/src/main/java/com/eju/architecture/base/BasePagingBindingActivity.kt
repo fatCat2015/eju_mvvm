@@ -1,0 +1,16 @@
+package com.eju.architecture.base
+
+import android.os.Bundle
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+
+abstract class BasePagingBindingActivity<VM:BasePagingViewModel<*,*>,B:ViewDataBinding>(private val layoutId:Int): BasePagingActivity<VM>(0) {
+
+    protected lateinit var binding:B
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        binding=DataBindingUtil.setContentView(this,layoutId)
+        binding.lifecycleOwner=this
+        super.onCreate(savedInstanceState)
+    }
+}

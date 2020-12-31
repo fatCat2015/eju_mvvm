@@ -5,6 +5,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import com.eju.architecture.base.BaseActivity
+import com.eju.architecture.base.BasePagingActivity
+import com.eju.architecture.base.BasePagingViewModel
 import com.eju.architecture.base.IPagingView
 import com.eju.architecture.getViewModel
 import com.eju.architecture.observe
@@ -13,28 +15,23 @@ import com.eju.demo.TestAdapter
 import com.eju.demo.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.activity_list.*
 
-class ListActivity : BaseActivity(R.layout.activity_list),IPagingView {
+class ListActivity : BasePagingActivity<ListViewModel>(R.layout.activity_list) {
 
-    private var vm:ListViewModel?=null
     private var adapter:TestAdapter?=null
 
-    override fun initViewModels() {
-        vm=getViewModel(ListViewModel::class.java)
-    }
 
     override fun setListeners() {
         bt0.setOnClickListener {
-            vm?.refresh()
+            viewModel.refresh()
         }
         bt1.setOnClickListener {
-            vm?.loadMore()
+            viewModel.loadMore()
 
         }
-
 
         et.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
-                vm?.keyword=s?.toString()
+                viewModel.keyword=s?.toString()
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -45,7 +42,7 @@ class ListActivity : BaseActivity(R.layout.activity_list),IPagingView {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        val list=vm?.adapterList   //adapter数据源
+        val list=viewModel?.adapterList   //adapter数据源
         adapter=TestAdapter(list).also {
             rv.adapter=it
         }

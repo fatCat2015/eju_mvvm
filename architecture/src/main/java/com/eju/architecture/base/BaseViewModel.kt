@@ -1,40 +1,53 @@
 package com.eju.architecture.base
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.*
+import com.eju.network.ExceptionConverter
+import com.eju.architecture.ResultCallback
 import com.eju.architecture.livedata.CountLiveData
 import com.eju.architecture.livedata.UILiveData
-import com.eju.network.AppResponse
+import com.eju.architecture.util.ReflectUtil
+import com.eju.network.BaseResult
+import com.eju.network.NetworkUtil
 import kotlinx.coroutines.*
 import java.lang.Exception
+import java.lang.NullPointerException
 
-open class BaseViewModel():ViewModel(), IView {
+open class BaseViewModel<M:BaseModel>():ViewModel(), IBaseView,DefaultLifecycleObserver {
 
     internal val exceptionLiveData=UILiveData<Exception>()
 
     internal val toastLiveData=UILiveData<String>()
 
-    internal val finishPageLiveData=
-        CountLiveData()
+    internal val finishPageLiveData= CountLiveData()
 
-    internal val showLoadingLiveData=
-        UILiveData<String>()
+    internal val showLoadingLiveData= UILiveData<String>()
 
-    internal val hideLoadingLiveData=
-        CountLiveData()
+    internal val hideLoadingLiveData= CountLiveData()
 
 
+    private val modelDelegate = lazy {
+        ReflectUtil.getTypeAt<M>(javaClass,0)?.let {modelClass->
+            modelClass.newInstance()
+        }?:throw NullPointerException("model is null")
+    }
+    protected val model:M by modelDelegate
 
+    /**
+     * 启动一个协程
+     */
     fun launch(block: suspend CoroutineScope.() -> Unit):Job{
         return viewModelScope.launch (block = block)
     }
 
 
-    fun <T> execute(block: suspend CoroutineScope.() -> T,
-                    showLoading:Boolean=true,
-                    loadingMsg:String?=null,
-                    onFailed: ((Exception) -> Boolean)? = null,
-                    onComplete: (() -> Unit)? = null,
-                    onSuccess: (T) -> Unit
+    /**
+     * 启动一个协程 在协程中处理返回数据
+     */
+    fun <T> launch(block: suspend CoroutineScope.() -> T,
+                   resultCallback: ResultCallback<T>,
+                   showLoading:Boolean=true,
+                   loadingMsg:String?=null
     ):Job{
         return launch {
             try {
@@ -42,84 +55,38 @@ open class BaseViewModel():ViewModel(), IView {
                     showLoading(loadingMsg)
                 }
                 val data=block()
-                onSuccess?.invoke(data)
+                resultCallback.onSuccess(data)
             } catch (e: Exception) {
-                onFailed?.let {
-                    if(!onFailed.invoke(e)){
-                        showError(e)
-                    }
-                }?:showError(e)
-
+                if(!resultCallback.onFailed(e)){
+                    showError(e)
+                }
             } finally {
                 if(showLoading){
                     hideLoading()
                 }
-                onComplete?.invoke()
+                resultCallback.onComplete()
             }
         }
     }
 
+//    /**
+//     * 启动一个协程 请求接口
+//     */
+//    fun <T> callApi(block: suspend CoroutineScope.() -> BaseResult<T>,
+//                    resultCallback: ResultCallback<T>,
+//                    showLoading:Boolean=true,
+//                    loadingMsg:String?=null
+//    ):Job{
+//        return launch({block().result},resultCallback,showLoading,loadingMsg)
+//    }
 
-    fun <T> apiCall(block: suspend CoroutineScope.() -> AppResponse<T>,
-                    showLoading:Boolean=true,
-                    loadingMsg:String?=null,
-                    onFailed: ((Exception) -> Boolean)? = null,
-                    onComplete: (() -> Unit)? = null,
-                    onSuccess: (T) -> Unit
-    ):Job {
-        return execute(block = {block().result},showLoading = showLoading,loadingMsg = loadingMsg,
-            onFailed = onFailed,onComplete = onComplete,onSuccess = onSuccess
-        )
-    }
-
-
-
-    fun <T> liveData(block: suspend LiveDataScope<T>.() -> Unit):LiveData<T>{
-        return liveData(context = viewModelScope.coroutineContext,timeoutInMs =10000,block = block)
-    }
-
-    fun <T> createLiveData(
-        showLoading:Boolean=true,
-        loadingMsg:String?=null,
-        onFailed: ((Exception) -> Boolean)? = null,
-        onComplete: (() -> Unit)? = null,
-        block: suspend CoroutineScope.() -> T,
-    ):LiveData<T>{
-        return liveData {
-            try {
-                if(showLoading){
-                    showLoading(loadingMsg)
-                }
-                withContext(viewModelScope.coroutineContext){
-                    emit(block())
-                }
-            } catch (e: Exception) {
-                onFailed?.let {
-                    if(!onFailed.invoke(e)){
-                        showError(e)
-                    }
-                }?:showError(e)
-
-            } finally {
-                if(showLoading){
-                    hideLoading()
-                }
-                onComplete?.invoke()
-            }
-
+    @CallSuper
+    override fun onCleared() {
+        super.onCleared()
+        if(modelDelegate.isInitialized()){
+            model.onDestroy()
         }
-    }
 
-    fun <T> createApiLiveData(
-        showLoading:Boolean=true,
-        loadingMsg:String?=null,
-        onFailed: ((Exception) -> Boolean)? = null,
-        onComplete: (() -> Unit)? = null,
-        block: suspend CoroutineScope.() -> AppResponse<T>,
-    ):LiveData<T>{
-        return createLiveData(showLoading=showLoading,loadingMsg = loadingMsg,onFailed = onFailed,onComplete = onComplete){
-            block().result
-        }
     }
 
 

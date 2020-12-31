@@ -1,18 +1,27 @@
 package com.eju.network
 
+import android.app.Application
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 object NetworkUtil {
 
     private lateinit var retrofit:Retrofit
 
+    internal lateinit var application:Application
+
     private val requestHeaders= mutableMapOf<String,String>()
 
     private val serviceCacheMap= mutableMapOf<Class<*>,Any>()
+
+    private val exceptionConverter:IExceptionConverter by lazy{
+        ExceptionConverter()
+    }
+
 
     fun addRequestHeader(key:String,value:String){
         requestHeaders[key] = value
@@ -22,13 +31,18 @@ object NetworkUtil {
         requestHeaders.putAll(headers)
     }
 
-    fun init(baseUrl:String,showLog:Boolean=BuildConfig.DEBUG,logTag:String="NetworkUtil",requestLogTag:String?=null,responseLogTag:String?=null){
+    fun init(application:Application,baseUrl:String){
+        init(application,ApiConfig(baseUrl))
+    }
+
+    fun init(application:Application,config: ApiConfig){
+        this.application=application
         val okHttpClient= OkHttpClient.Builder()
             .addInterceptor(AddHeadersInterceptor(requestHeaders))
-            .addInterceptor(createLoggingInterceptor(showLog,logTag,requestLogTag,responseLogTag))  //请求信息log 放在最后addInterceptor
+            .addInterceptor(createLoggingInterceptor(config.showLog,config.logTag,config.logRequestTag,config.logResponseTag))  //请求信息log 放在最后addInterceptor
             .build()
         retrofit=Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(config.baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
@@ -52,17 +66,47 @@ object NetworkUtil {
         }
     }
 
-    fun <T> getData(response: AppResponse<T>):T{
-        return if(response.isSuccess()){
-            response.data?.let {
-                it
-            }?: "" as T
-        }else{
-            throw ApiException(response.code,response.message)
+
+    private fun convertException(e:Exception?):Exception{
+        return exceptionConverter.convert(e)
+    }
+
+    suspend fun <T> result(block: suspend() -> BaseResult<T>):T{
+        try {
+            return block().result
+        } catch (e: Exception) {
+            throw convertException(e)
         }
     }
 
-
+    suspend fun <T> request(block: suspend() -> BaseResult<T>):BaseResult<T>{
+        try {
+            return block()
+        } catch (e: Exception) {
+            throw convertException(e)
+        }
+    }
 }
 
+
+class ApiConfig(val baseUrl:String)  {
+    var showLog: Boolean = BuildConfig.DEBUG
+    var logTag: String = "NetworkUtil"
+    var logRequestTag: String? = null
+        get() {
+            return if(field.isNullOrEmpty()){
+                "${logTag}-request"
+            }else{
+                field
+            }
+        }
+    var logResponseTag: String? = null
+        get() {
+            return if(field.isNullOrEmpty()){
+                "${logTag}-response"
+            }else{
+                field
+            }
+        }
+}
 

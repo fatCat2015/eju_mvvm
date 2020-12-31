@@ -1,27 +1,22 @@
 package com.eju.architecture.base
 
-import androidx.lifecycle.MutableLiveData
+import com.eju.architecture.ResultCallback
 import com.eju.architecture.livedata.CountLiveData
 import com.eju.architecture.livedata.UILiveData
-import com.eju.network.AppResponse
+import com.eju.network.BaseResult
 import com.eju.network.PagedList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import java.lang.Exception
 
-abstract class BasePagingViewModel<T>(private val startPage:Int=0,private val pageSize:Int=10) :
-    BaseViewModel(),IPagingView{
+abstract class BasePagingViewModel<M:BaseModel,T>( startPage:Int=0, pageSize:Int=10) : BaseViewModel<M>(),IPagingView{
 
-    internal val finishRefreshLiveData=
-        CountLiveData()
+    internal val finishRefreshLiveData= CountLiveData()
 
-    internal val finishLoadMoreLiveData=
-        CountLiveData()
+    internal val finishLoadMoreLiveData= CountLiveData()
 
     internal val enableLoadMoreLiveData=UILiveData<Boolean>()
 
-    internal val notifyDataSetLiveData=
-        CountLiveData()
+    internal val notifyDataSetLiveData= CountLiveData()
 
     internal val showEmptyViewLiveData=UILiveData<Boolean>()
 
@@ -49,31 +44,39 @@ abstract class BasePagingViewModel<T>(private val startPage:Int=0,private val pa
 
     protected abstract fun loadPagedData(pageParams: PageParams)
 
-    fun pagedApiCall(block: suspend CoroutineScope.() -> AppResponse<PagedList<T>>):Job {
+    fun pagedApiCall(block: suspend CoroutineScope.() -> PagedList<T>):Job {
         val refresh=pageParams.refreshFlag
-        return execute(block = {block().result},showLoading = false,
-            onFailed = {
+        return launch(block,object:ResultCallback<PagedList<T>>{
+            override fun onSuccess(pagedList: PagedList<T>) {
+                handlePagedResult(refresh,pagedList)
+            }
+            override fun onFailed(e: Throwable): Boolean {
                 pageParams.back()
-                false
-            },
-            onSuccess = {pagedList->
-                if(refresh){
-                    adapterList.clear()
-                }
-                adapterList.addAll(pagedList.list)
-                setEnableLoadMore(adapterList.size<pagedList.totalCount)
-                showEmptyView(adapterList.isEmpty())
-                notifyDataSetChanged()
-            },
-            onComplete = {
+                return super.onFailed(e)
+            }
+            override fun onComplete() {
+                super.onComplete()
                 if(refresh){
                     finishRefresh()
                 }else{
                     finishLoadMore()
                 }
             }
-        )
+
+        },showLoading = false)
     }
+
+    open fun handlePagedResult(refresh:Boolean,pagedList: PagedList<T>){
+        if(refresh){
+            adapterList.clear()
+        }
+        adapterList.addAll(pagedList.list)
+        setEnableLoadMore(verifyEnableLoadMore(pagedList))
+        showEmptyView(adapterList.isEmpty())
+        notifyDataSetChanged()
+    }
+
+    open fun verifyEnableLoadMore(pagedList: PagedList<T>)=adapterList.size<pagedList.totalCount
 
 
     final override fun finishRefresh() {

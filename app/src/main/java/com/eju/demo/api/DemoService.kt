@@ -1,6 +1,6 @@
 package com.eju.demo.api
 
-import com.eju.network.AppResponse
+import com.eju.network.BaseResult
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface DemoService{
     @GET("/rescue/detail")
     @Headers("version:1.0.9")
-    suspend fun getHelpDetail(@Query("rescue_id") id:String): AppResponse<HelpDetail>
+    suspend fun getHelpDetail(@Query("rescue_id") id:String): BaseResult<HelpDetail>
 }
 
 

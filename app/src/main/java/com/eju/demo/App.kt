@@ -8,7 +8,6 @@ class App:BaseApp() {
 
     override fun onCreate() {
         super.onCreate()
-        NetworkUtil.init("http://testapi.ichongyou.cn/")
 
     }
 }

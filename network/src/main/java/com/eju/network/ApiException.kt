@@ -7,10 +7,7 @@ open class ApiException(val code:String?,val msg:String?):RuntimeException(msg) 
 
     companion object{
         const val codeIsNull = "-1"
-        const val dataIsNull = "-2"
+        const val kickedOut = "10000"
     }
 
 }
-
-class CodeNullException():ApiException(codeIsNull,"code为null")
-class DataNullException():ApiException(dataIsNull,"data为null")

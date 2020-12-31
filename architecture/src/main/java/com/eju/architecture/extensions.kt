@@ -1,13 +1,13 @@
 package com.eju.architecture
 
-import android.content.res.Resources
-import android.util.TypedValue
 import androidx.lifecycle.*
-import com.eju.architecture.base.BasePagingViewModel
-import com.eju.architecture.base.BaseViewModel
-import com.eju.architecture.base.IPagingView
-import com.eju.architecture.base.IView
-import java.lang.StringBuilder
+import com.eju.network.BaseResult
+import com.eju.network.ExceptionConverter
+import com.eju.network.NetworkUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import java.lang.Exception
 
 
 fun <T> LifecycleOwner.observe(liveData: LiveData<T>?,onChangedCallback:(T)->Unit){
@@ -15,53 +15,8 @@ fun <T> LifecycleOwner.observe(liveData: LiveData<T>?,onChangedCallback:(T)->Uni
 }
 
 fun <T:ViewModel> ViewModelStoreOwner.getViewModel(modeClass:Class<T>, viewModelCreator:(()->T)?=null):T{
-    val viewModel=getOrCreateViewModel(this,modeClass,viewModelCreator)
-    observeViews(viewModel,this)
-    observePagingViews(viewModel,this)
-    return viewModel
+    return getOrCreateViewModel(this,modeClass,viewModelCreator)
 }
-
-
-private fun observeViews(viewModel:ViewModel,viewModelStoreOwner: ViewModelStoreOwner){
-    if(viewModel is BaseViewModel && viewModelStoreOwner is LifecycleOwner && viewModelStoreOwner is IView){
-        viewModelStoreOwner.observe(viewModel.exceptionLiveData){
-            viewModelStoreOwner.showError(it)
-        }
-        viewModelStoreOwner.observe(viewModel.showLoadingLiveData){
-            viewModelStoreOwner.showLoading(it)
-        }
-        viewModelStoreOwner.observe(viewModel.hideLoadingLiveData){
-            viewModelStoreOwner.hideLoading()
-        }
-        viewModelStoreOwner.observe(viewModel.toastLiveData){
-            viewModelStoreOwner.toast(it)
-        }
-        viewModelStoreOwner.observe(viewModel.finishPageLiveData){
-            viewModelStoreOwner.finishPage()
-        }
-    }
-}
-
-private fun observePagingViews(viewModel:ViewModel,viewModelStoreOwner: ViewModelStoreOwner){
-    if(viewModel is BasePagingViewModel<*> && viewModelStoreOwner is LifecycleOwner && viewModelStoreOwner is IPagingView){
-        viewModelStoreOwner.observe(viewModel.finishRefreshLiveData){
-            viewModelStoreOwner.finishRefresh()
-        }
-        viewModelStoreOwner.observe(viewModel.finishLoadMoreLiveData){
-            viewModelStoreOwner.finishLoadMore()
-        }
-        viewModelStoreOwner.observe(viewModel.enableLoadMoreLiveData){
-            viewModelStoreOwner.setEnableLoadMore(it)
-        }
-        viewModelStoreOwner.observe(viewModel.showEmptyViewLiveData){
-            viewModelStoreOwner.showEmptyView(it)
-        }
-        viewModelStoreOwner.observe(viewModel.notifyDataSetLiveData){
-            viewModelStoreOwner.notifyDataSetChanged()
-        }
-    }
-}
-
 
 private fun  <T: ViewModel> getOrCreateViewModel(viewModelStoreOwner: ViewModelStoreOwner, modeClass:Class<T>, viewModelCreator:(()->T)?=null):T{
     return viewModelCreator?.let {
@@ -71,6 +26,16 @@ private fun  <T: ViewModel> getOrCreateViewModel(viewModelStoreOwner: ViewModelS
             }
         }).get(modeClass)
     }?: ViewModelProvider(viewModelStoreOwner).get(modeClass)
+}
+
+fun <T> CoroutineScope.asyncSafely(block: suspend CoroutineScope.() -> T): Deferred<T?> {
+    return async {
+        try {
+            block()
+        }catch (e: Exception){
+            null
+        }
+    }
 }
 
 

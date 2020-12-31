@@ -1,28 +1,60 @@
 package com.eju.architecture.base
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.eju.architecture.getViewModel
+import com.eju.architecture.observe
+import com.eju.architecture.util.ReflectUtil
 import java.lang.Exception
+import java.lang.NullPointerException
+import java.lang.reflect.ParameterizedType
 
-abstract class BaseActivity(private val layoutId:Int):AppCompatActivity(),
-    IView {
+abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCompatActivity(), IBaseView {
 
-    private val viewImpl: IView by lazy{
+    private val viewImpl: IBaseView by lazy{
         IViewDefaultImpl(this)
     }
+
+    protected open val viewModelCreator:(()->VM)?=null
+
+    protected val viewModel:VM by lazy{
+        ReflectUtil.getTypeAt<VM>(javaClass,0)?.let { viewModelClass->
+            getViewModel(viewModelClass,viewModelCreator).also {
+                lifecycle.addObserver(it)
+                observeViewBehavior(it)
+            }
+        }?:throw NullPointerException("viewModel is null")
+    }
+
+    internal open fun observeViewBehavior(viewModel: VM){
+        observe(viewModel.exceptionLiveData){
+            showError(it)
+        }
+        observe(viewModel.showLoadingLiveData){
+            showLoading(it)
+        }
+        observe(viewModel.hideLoadingLiveData){
+            hideLoading()
+        }
+        observe(viewModel.toastLiveData){
+            toast(it)
+        }
+        observe(viewModel.finishPageLiveData){
+            finishPage()
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(layoutId!=0){
             setContentView(layoutId)
         }
-        initViewModels()
         setListeners()
         initData(savedInstanceState)
     }
 
-
-    abstract fun initViewModels()
 
     abstract fun setListeners()
 

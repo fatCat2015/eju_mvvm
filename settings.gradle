@@ -1,4 +1,4 @@
 include ':architecture'
 include ':network'
 include ':app'
-rootProject.name = "architecture"
+rootProject.name = "demo"

@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/bt0"
-        android:text="接口并发"
+        android:text="接口串行"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,7 +16,7 @@
 
     <Button
         android:id="@+id/bt1"
-        android:text="接口顺序执行"
+        android:text="接口并发"
         app:layout_constraintTop_toBottomOf="@id/bt0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
