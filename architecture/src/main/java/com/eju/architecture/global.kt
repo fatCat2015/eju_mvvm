@@ -9,6 +9,7 @@ import android.util.TypedValue
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.viewModelScope
 import com.eju.architecture.base.BaseApp
 import kotlinx.coroutines.*
 import java.lang.Exception
@@ -58,22 +59,20 @@ fun <T> Collection<T>?.fold(separator:String=",",converter:((T)->String)?=null):
     return stringBuilder.toString()
 }
 
-/**
- * 启动一个协程 在协程中处理返回数据
- */
-fun <T> launch(block: suspend CoroutineScope.() -> T,
-               resultCallback: ResultCallback<T>
-):Job {
-    return GlobalScope.launch (context = Dispatchers.Main){
+fun launch(
+    onError:((Exception)->Boolean)? = null,
+    onComplete:(()->Unit)? = null,
+    block: suspend CoroutineScope.() -> Unit
+):Job{
+    return GlobalScope.launch{
         try {
-            val data=block()
-            resultCallback.onSuccess(data)
+            block()
         } catch (e: Exception) {
-            if(!resultCallback.onFailed(e)){
+            if(onError?.invoke(e)!=true){
                 ApiExceptionHandler.handle(e)
             }
         } finally {
-            resultCallback.onComplete()
+            onComplete?.invoke()
         }
     }
 }

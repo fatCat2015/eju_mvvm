@@ -63,6 +63,8 @@ dependencies {
     api rootProject.ext.androidDependencies.lifecycleProcess
     api rootProject.ext.androidDependencies.lifecycleCommon
 
+    api rootProject.ext.dependencies.timber
+
     api project(path: ':network')
 
 }

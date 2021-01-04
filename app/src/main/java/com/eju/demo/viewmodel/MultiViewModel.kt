@@ -2,7 +2,6 @@ package com.eju.demo.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.eju.architecture.ResultCallback
 import com.eju.architecture.base.BaseViewModel
 import com.eju.architecture.base.SimpleViewModel
 import com.eju.demo.api.DemoService
@@ -21,23 +20,17 @@ class MultiViewModel:BaseViewModel<MultiModel>() {
 
 
     fun demo1(){
-        launch ({
-            model.demo1()
-        },object:ResultCallback<HelpDetail>{
-            override fun onSuccess(data: HelpDetail) {
-                neededData.postValue(data)
-            }
-        })
+        launch {
+            val data=model.demo1()
+            neededData.postValue(data)
+        }
     }
 
     fun demo2(){
-        launch ({
-            model.demo2()
-        },object:ResultCallback<String>{
-            override fun onSuccess(data: String) {
-                neededData1.postValue(data)
-            }
-        })
+        launch {
+            val data=model.demo2()
+            neededData1.postValue(data)
+        }
     }
 
 }

@@ -20,7 +20,7 @@ abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCo
 
     protected open val viewModelCreator:(()->VM)?=null
 
-    protected val viewModel:VM by lazy{
+    private val viewModelDelegate = lazy{
         ReflectUtil.getTypeAt<VM>(javaClass,0)?.let { viewModelClass->
             getViewModel(viewModelClass,viewModelCreator).also {
                 lifecycle.addObserver(it)
@@ -28,6 +28,8 @@ abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCo
             }
         }?:throw NullPointerException("viewModel is null")
     }
+
+    protected val viewModel:VM by viewModelDelegate
 
     internal open fun observeViewBehavior(viewModel: VM){
         observe(viewModel.exceptionLiveData){
@@ -80,6 +82,13 @@ abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCo
 
     override fun finishPage() {
         viewImpl.finishPage()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(viewModelDelegate.isInitialized()){
+            lifecycle.removeObserver(viewModel)
+        }
     }
 
 }

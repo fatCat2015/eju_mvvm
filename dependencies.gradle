@@ -77,6 +77,8 @@ ext{
             // https://github.com/ethanhua/Skeleton
             skeleton                  : 'com.ethanhua:skeleton:1.1.2',
             shimmerLayout             : 'io.supercharge:shimmerlayout:2.1.0',
+            //https://github.com/JakeWharton/timber
+            timber                    : 'com.jakewharton.timber:timber:4.7.1',
     ]
 
     sdk_dependencies =[

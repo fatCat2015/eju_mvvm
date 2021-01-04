@@ -5,6 +5,8 @@ import android.content.Context
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.eju.architecture.ApiExceptionHandler
+import com.eju.architecture.widget.ToastUtil
+import timber.log.Timber
 import java.lang.Exception
 
 interface IBaseView {
@@ -23,7 +25,7 @@ interface IBaseView {
 class IViewDefaultImpl(private val obj:Any?): IBaseView {
 
     override fun toast(msg: String?) {
-        Log.i("sck220", "toast: ${msg}")
+        ToastUtil.toast(obj,msg)
     }
 
     override fun showError(exception: Exception?) {
@@ -31,15 +33,19 @@ class IViewDefaultImpl(private val obj:Any?): IBaseView {
     }
 
     override fun showLoading(msg: String?) {
-        Log.i("sck220", "showLoading: ${msg}")
+        Timber.i("showLoading")
     }
 
     override fun hideLoading() {
-        Log.i("sck220", "hideLoading: ")
+        Timber.i("hideLoading")
     }
 
     override fun finishPage() {
-        Log.i("sck220", "finishPage: ")
+        if(obj is Activity){
+            obj.finish()
+        }else if(obj is Fragment){
+            obj.activity?.finish()
+        }
     }
 
 }

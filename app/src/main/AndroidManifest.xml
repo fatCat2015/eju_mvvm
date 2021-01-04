@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.ListActivity"></activity>
+        <activity android:name=".view.TestActivity"></activity>
+        <activity android:name=".view.ListActivity" />
         <activity android:name=".view.MultiApiAct" />
         <activity android:name=".view.OrderDetailAct" />
         <activity android:name=".view.DetailAct" />

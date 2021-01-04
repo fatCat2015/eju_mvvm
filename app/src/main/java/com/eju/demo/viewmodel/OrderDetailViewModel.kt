@@ -1,7 +1,6 @@
 package com.eju.demo.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import com.eju.architecture.ResultCallback
 import com.eju.architecture.base.BaseViewModel
 import com.eju.demo.api.DemoService
 import com.eju.demo.api.HelpDetail
@@ -19,14 +18,9 @@ class OrderDetailViewModel:BaseViewModel<OrderDetailModel>() {
 
 
     fun queryOrderDetail(){
-        launch(
-            {
-                model.orderDetail(orderId!!)
-            }
-            ,object :ResultCallback<HelpDetail>{
-                override fun onSuccess(data: HelpDetail) {
-                    orderDetail.value=data
-                }
-            })
+        launch{
+            val data=model.orderDetail(orderId!!)
+            orderDetail.value=data
+        }
     }
 }

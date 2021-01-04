@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.annotation.CallSuper
 import androidx.lifecycle.*
 import com.eju.network.ExceptionConverter
-import com.eju.architecture.ResultCallback
 import com.eju.architecture.livedata.CountLiveData
 import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.util.ReflectUtil
@@ -34,52 +33,36 @@ open class BaseViewModel<M:BaseModel>():ViewModel(), IBaseView,DefaultLifecycleO
     }
     protected val model:M by modelDelegate
 
-    /**
-     * 启动一个协程
-     */
-    fun launch(block: suspend CoroutineScope.() -> Unit):Job{
-        return viewModelScope.launch (block = block)
-    }
 
 
     /**
      * 启动一个协程 在协程中处理返回数据
      */
-    fun <T> launch(block: suspend CoroutineScope.() -> T,
-                   resultCallback: ResultCallback<T>,
-                   showLoading:Boolean=true,
-                   loadingMsg:String?=null
+    fun launch(showLoading:Boolean=true,
+                   loadingMsg:String?=null ,
+                   onError:((Exception)->Boolean)? = null,
+                   onComplete:(()->Unit)? = null,
+                   block: suspend CoroutineScope.() -> Unit
     ):Job{
-        return launch {
+        return viewModelScope.launch {
             try {
                 if(showLoading){
                     showLoading(loadingMsg)
                 }
-                val data=block()
-                resultCallback.onSuccess(data)
+                block()
             } catch (e: Exception) {
-                if(!resultCallback.onFailed(e)){
+                if(onError?.invoke(e)!=true){
                     showError(e)
                 }
             } finally {
                 if(showLoading){
                     hideLoading()
                 }
-                resultCallback.onComplete()
+                onComplete?.invoke()
             }
         }
     }
 
-//    /**
-//     * 启动一个协程 请求接口
-//     */
-//    fun <T> callApi(block: suspend CoroutineScope.() -> BaseResult<T>,
-//                    resultCallback: ResultCallback<T>,
-//                    showLoading:Boolean=true,
-//                    loadingMsg:String?=null
-//    ):Job{
-//        return launch({block().result},resultCallback,showLoading,loadingMsg)
-//    }
 
     @CallSuper
     override fun onCleared() {
@@ -87,7 +70,6 @@ open class BaseViewModel<M:BaseModel>():ViewModel(), IBaseView,DefaultLifecycleO
         if(modelDelegate.isInitialized()){
             model.onDestroy()
         }
-
     }
 
 

@@ -8,6 +8,7 @@ import com.eju.architecture.BuildConfig
 import com.eju.architecture.currentProcessName
 import com.eju.network.NetworkUtil
 import com.imyyq.mvvm.app.AppActivityManager
+import timber.log.Timber
 
 open class BaseApp:Application() {
 
@@ -23,16 +24,19 @@ open class BaseApp:Application() {
         val processName = currentProcessName
         if (processName == packageName) {
             // 主进程初始化
-            registerActivityLifecycleCallbacks()
-            AppStateTracker.init()
-            NetworkUtil.init(this,BuildConfig.baseUrl)
+            registerActivityLifecycleCallbacks()   //ActivityLifecycleCallbacks
+            AppStateTracker.init()   //ProcessLifecycleOwner
+            NetworkUtil.init(this,BuildConfig.baseUrl)  //Retrofit
+            if(BuildConfig.DEBUG){     //log
+                Timber.plant(Timber.DebugTree())
+            }
             onMainProcessInit()
         } else {
             // 其他进程初始化
             processName?.let { onOtherProcessInit(it) }
         }
-
     }
+
 
     private fun registerActivityLifecycleCallbacks(){
         registerActivityLifecycleCallbacks(object:ActivityLifecycleCallbacks{

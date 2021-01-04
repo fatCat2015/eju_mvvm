@@ -8,10 +8,10 @@ import kotlinx.coroutines.*
 
 open class BaseModel {
 
+    fun <T> getApi(clazz: Class<T>) = NetworkUtil.getService(clazz)
+
     suspend fun <T> callApi(block:suspend()->BaseResult<T>):T{
-        return withContext(Dispatchers.IO){
-            NetworkUtil.result(block)
-        }
+        return NetworkUtil.result(block)
     }
 
     suspend fun <T> execute(block:suspend CoroutineScope.()->T):T{

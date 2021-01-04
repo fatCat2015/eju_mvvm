@@ -1,6 +1,5 @@
 package com.eju.architecture.base
 
-import com.eju.architecture.ResultCallback
 import com.eju.architecture.livedata.CountLiveData
 import com.eju.architecture.livedata.UILiveData
 import com.eju.network.BaseResult
@@ -46,24 +45,23 @@ abstract class BasePagingViewModel<M:BaseModel,T>( startPage:Int=0, pageSize:Int
 
     fun pagedApiCall(block: suspend CoroutineScope.() -> PagedList<T>):Job {
         val refresh=pageParams.refreshFlag
-        return launch(block,object:ResultCallback<PagedList<T>>{
-            override fun onSuccess(pagedList: PagedList<T>) {
-                handlePagedResult(refresh,pagedList)
-            }
-            override fun onFailed(e: Throwable): Boolean {
+        return launch(
+            showLoading = false,
+            onError = {
                 pageParams.back()
-                return super.onFailed(e)
-            }
-            override fun onComplete() {
-                super.onComplete()
+                false
+            },
+            onComplete = {
                 if(refresh){
                     finishRefresh()
                 }else{
                     finishLoadMore()
                 }
+            },block = {
+                val pagedList=block()
+                handlePagedResult(refresh,pagedList)
             }
-
-        },showLoading = false)
+        )
     }
 
     open fun handlePagedResult(refresh:Boolean,pagedList: PagedList<T>){
