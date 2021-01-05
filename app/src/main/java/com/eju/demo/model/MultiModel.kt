@@ -14,8 +14,8 @@ class MultiModel:BaseModel() {
     suspend fun demo1():HelpDetail{
         return execute{
             delay(2000)
-            val firstData= callApi{getApi(DemoService::class.java).getHelpDetail("58")}
-            val secondData= callApi{getApi(DemoService::class.java).getHelpDetail("58")}
+            val firstData= getApi(DemoService::class.java).getHelpDetail("58").result
+            val secondData= getApi(DemoService::class.java).getHelpDetail("58").result
             //接口顺序执行 firstData ->sendData
             secondData
         }
@@ -25,10 +25,10 @@ class MultiModel:BaseModel() {
     suspend fun demo2():String{
         return execute{
             val onePartData0=asyncSafely {
-                callApi{getApi(DemoService::class.java).getHelpDetail("58")}
+                getApi(DemoService::class.java).getHelpDetail("58").result
             }
             val onePartData1=asyncSafely() {
-                callApi{getApi(DemoService::class.java).getHelpDetail("58")}
+                getApi(DemoService::class.java).getHelpDetail("58").result
             }
             val data0=onePartData0.await()
             val data1=onePartData1.await()

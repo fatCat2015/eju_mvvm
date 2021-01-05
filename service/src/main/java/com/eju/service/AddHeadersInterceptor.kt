@@ -1,7 +1,7 @@
 /**
  * Copyright 2019 Danny Keng
  */
-package com.eju.network
+package com.eju.service
 
 import okhttp3.Interceptor
 import okhttp3.Response

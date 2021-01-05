@@ -1,4 +1,4 @@
-package com.eju.network
+package com.eju.service
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,9 +1,6 @@
 package com.eju.architecture
 
 import androidx.lifecycle.*
-import com.eju.network.BaseResult
-import com.eju.network.ExceptionConverter
-import com.eju.network.NetworkUtil
 import kotlinx.coroutines.*
 import java.lang.Exception
 

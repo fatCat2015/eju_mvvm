@@ -1,4 +1,4 @@
 include ':architecture'
-include ':network'
+include ':service'
 include ':app'
 rootProject.name = "demo"

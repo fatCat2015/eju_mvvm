@@ -4,12 +4,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.res.Resources
 import android.os.Looper
-import android.util.Log
 import android.util.TypedValue
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.viewModelScope
 import com.eju.architecture.base.BaseApp
 import kotlinx.coroutines.*
 import java.lang.Exception
@@ -64,12 +59,12 @@ fun launch(
     onComplete:(()->Unit)? = null,
     block: suspend CoroutineScope.() -> Unit
 ):Job{
-    return GlobalScope.launch{
+    return GlobalScope.launch(Dispatchers.Main.immediate){
         try {
             block()
         } catch (e: Exception) {
             if(onError?.invoke(e)!=true){
-                ApiExceptionHandler.handle(e)
+                ExceptionHandler.handle(e)
             }
         } finally {
             onComplete?.invoke()

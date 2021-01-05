@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.eju.network">
+    package="com.eju.service">
 
     <uses-permission android:name="android.permission.INTERNET">
     </uses-permission>

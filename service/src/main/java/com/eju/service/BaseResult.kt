@@ -1,4 +1,4 @@
-package com.eju.network
+package com.eju.service
 
 import com.google.gson.annotations.SerializedName
 
@@ -11,7 +11,7 @@ data class BaseResult<T>(
 ){
     private fun isSuccess()=code=="SYS000"
 
-    internal val result :T get() {
+    val result :T get() {
         return code?.let {
             if(isSuccess()){
                 data?.let {

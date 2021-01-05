@@ -1,4 +1,4 @@
-package com.eju.network
+package com.eju.service
 
 import java.lang.RuntimeException
 

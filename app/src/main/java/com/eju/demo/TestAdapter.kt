@@ -5,12 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.eju.demo.api.DemoService
 import com.eju.demo.databinding.ItemTestBinding
-import com.eju.network.ApiException
-import com.eju.network.NetworkUtil
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class TestAdapter(private val list:List<String>?):RecyclerView.Adapter<TestViewHolder>() {
 

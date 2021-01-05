@@ -3,7 +3,7 @@ package com.eju.demo
 import android.util.Log
 import com.eju.architecture.base.BaseModel
 import com.eju.architecture.launch
-import com.eju.network.BaseResult
+import com.eju.service.BaseResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 
@@ -40,10 +40,10 @@ object IMContext {
 
 class ImModel:BaseModel(){
     suspend fun loginIm():String{
-        return callApi {
+        return execute {
             delay(2000)
 //            BaseResult("SYS0001","11111111","Success")
-            BaseResult("SYS000","11111111","Success")
+            BaseResult("SYS000","11111111","Success").result
         }
     }
 }

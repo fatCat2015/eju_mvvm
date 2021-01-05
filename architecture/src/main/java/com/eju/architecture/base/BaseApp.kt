@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.eju.architecture.AppStateTracker
 import com.eju.architecture.BuildConfig
 import com.eju.architecture.currentProcessName
-import com.eju.network.NetworkUtil
+import com.eju.service.ServiceUtil
 import com.imyyq.mvvm.app.AppActivityManager
 import timber.log.Timber
 
@@ -26,7 +26,7 @@ open class BaseApp:Application() {
             // 主进程初始化
             registerActivityLifecycleCallbacks()   //ActivityLifecycleCallbacks
             AppStateTracker.init()   //ProcessLifecycleOwner
-            NetworkUtil.init(this,BuildConfig.baseUrl)  //Retrofit
+            ServiceUtil.init(this,BuildConfig.baseUrl)  //Retrofit
             if(BuildConfig.DEBUG){     //log
                 Timber.plant(Timber.DebugTree())
             }

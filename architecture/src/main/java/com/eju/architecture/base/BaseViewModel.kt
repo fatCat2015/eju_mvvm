@@ -1,14 +1,10 @@
 package com.eju.architecture.base
 
-import android.util.Log
 import androidx.annotation.CallSuper
 import androidx.lifecycle.*
-import com.eju.network.ExceptionConverter
 import com.eju.architecture.livedata.CountLiveData
 import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.util.ReflectUtil
-import com.eju.network.BaseResult
-import com.eju.network.NetworkUtil
 import kotlinx.coroutines.*
 import java.lang.Exception
 import java.lang.NullPointerException

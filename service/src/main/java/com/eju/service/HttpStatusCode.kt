@@ -1,4 +1,4 @@
-package com.eju.network
+package com.eju.service
 
 // 1xx消息
 const val perhapsContinue = 100

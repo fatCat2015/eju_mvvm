@@ -1,4 +1,4 @@
-package com.eju.network
+package com.eju.service
 
 import android.net.ParseException
 import com.google.gson.JsonIOException
@@ -12,7 +12,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 interface IExceptionConverter {
-    fun convert(e:Throwable?):Exception
+    fun convert(e:Exception):Exception
 }
 
 class ExceptionConverter:IExceptionConverter{
@@ -20,13 +20,13 @@ class ExceptionConverter:IExceptionConverter{
     /**
      * 转化一些异常信息为用户能读懂的信息
      */
-    override fun convert(e:Throwable?):Exception{
-        return Exception(convertErrorMsg(e),e)
+    override fun convert(e:Exception):Exception{
+        return convertException(e)
     }
 
-    private fun convertErrorMsg(e:Throwable?):String?{
-        val application=NetworkUtil.application
-        var msg=e?.message
+    private fun convertException(e:Exception):Exception{
+        val application=ServiceUtil.application
+        var msg :String? =null
         when{
             e is ConnectException ->{
                 msg= application.getString(R.string.ConnectException)
@@ -56,7 +56,9 @@ class ExceptionConverter:IExceptionConverter{
                 msg= application.getString(R.string.JsonParseException)
             }
         }
-        return msg
+        return msg?.let {
+            Exception(it,e)
+        }?:e
     }
 
 }

@@ -1,6 +1,8 @@
-package com.eju.network
+package com.eju.service
 
 import android.app.Application
+import com.facebook.stetho.Stetho
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import okhttp3.OkHttpClient
@@ -8,7 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
 
-object NetworkUtil {
+object ServiceUtil {
 
     private lateinit var retrofit:Retrofit
 
@@ -38,9 +40,17 @@ object NetworkUtil {
     fun init(application:Application,config: ApiConfig){
         this.application=application
         val okHttpClient= OkHttpClient.Builder()
+            .apply {
+                if(config.showLog){
+                    addNetworkInterceptor(StethoInterceptor())
+                }
+            }
             .addInterceptor(AddHeadersInterceptor(requestHeaders))
             .addInterceptor(createLoggingInterceptor(config.showLog,config.logTag,config.logRequestTag,config.logResponseTag))  //请求信息log 放在最后addInterceptor
             .build()
+        if(config.showLog){
+            Stetho.initializeWithDefaults(application)
+        }
         retrofit=Retrofit.Builder()
             .baseUrl(config.baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
@@ -67,26 +77,16 @@ object NetworkUtil {
     }
 
 
-    private fun convertException(e:Exception?):Exception{
+    fun convertNetException(e:Exception):Exception{
         return exceptionConverter.convert(e)
     }
-
-    suspend fun <T> result(block: suspend() -> BaseResult<T>):T{
-        try {
-            return block().result
-        } catch (e: Exception) {
-            throw convertException(e)
-        }
-    }
-
-
 
 }
 
 
 class ApiConfig(val baseUrl:String)  {
     var showLog: Boolean = BuildConfig.DEBUG
-    var logTag: String = "NetworkUtil"
+    var logTag: String = "ServiceUtil"
     var logRequestTag: String? = null
         get() {
             return if(field.isNullOrEmpty()){

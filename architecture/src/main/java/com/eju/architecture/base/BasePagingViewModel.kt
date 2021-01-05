@@ -2,8 +2,7 @@ package com.eju.architecture.base
 
 import com.eju.architecture.livedata.CountLiveData
 import com.eju.architecture.livedata.UILiveData
-import com.eju.network.BaseResult
-import com.eju.network.PagedList
+import com.eju.service.PagedList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 

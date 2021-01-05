@@ -1,6 +1,6 @@
 package com.eju.demo.api
 
-import com.eju.network.BaseResult
+import com.eju.service.BaseResult
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query

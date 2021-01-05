@@ -32,6 +32,8 @@ dependencies {
 
     api rootProject.ext.dependencies.retrofit
     api rootProject.ext.dependencies.converter_gson
+    implementation rootProject.ext.dependencies.stetho
+    implementation rootProject.ext.dependencies.stetho_okhttp
     implementation rootProject.ext.dependencies.LoggingInterceptor
 
 }
