@@ -5,10 +5,10 @@ import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
+import me.jessyan.retrofiturlmanager.RetrofitUrlManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Exception
 
 object ServiceUtil {
 
@@ -39,23 +39,31 @@ object ServiceUtil {
 
     fun init(application:Application,config: ApiConfig){
         this.application=application
-        val okHttpClient= OkHttpClient.Builder()
-            .apply {
-                if(config.showLog){
-                    addNetworkInterceptor(StethoInterceptor())
-                }
-            }
-            .addInterceptor(AddHeadersInterceptor(requestHeaders))
-            .addInterceptor(createLoggingInterceptor(config.showLog,config.logTag,config.logRequestTag,config.logResponseTag))  //请求信息log 放在最后addInterceptor
-            .build()
+        val okHttpClient=
+            RetrofitUrlManager.getInstance()
+                .with(
+                    OkHttpClient.Builder()
+                        .apply {
+                            if(config.showLog){
+                                addNetworkInterceptor(StethoInterceptor())
+                            }
+                        }
+                        .addInterceptor(AddHeadersInterceptor(requestHeaders))
+                )
+                .addInterceptor(createLoggingInterceptor(config.showLog,config.logTag,config.logRequestTag,config.logResponseTag))  //请求信息log 放在最后addInterceptor
+                .build()
+
         if(config.showLog){
             Stetho.initializeWithDefaults(application)
         }
+
         retrofit=Retrofit.Builder()
             .baseUrl(config.baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
+
+        UrlManager.putUrls()
     }
 
 
@@ -79,6 +87,19 @@ object ServiceUtil {
 
     fun convertNetException(e:Exception):Exception{
         return exceptionConverter.convert(e)
+    }
+
+}
+
+
+object UrlManager{
+
+    private const val HEADER_VALUE_YUN = "yun"
+
+    const val DOMAIN_YUN = "Domain-Name:${HEADER_VALUE_YUN}"
+
+    internal fun putUrls() {
+        RetrofitUrlManager.getInstance().putDomain(HEADER_VALUE_YUN, "http://www.baidu.com")
     }
 
 }

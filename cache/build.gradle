@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -7,23 +7,12 @@ android {
     buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.eju.demo"
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
-
-    dataBinding{
-        enabled true
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
 
     buildTypes {
         release {
@@ -35,11 +24,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    testImplementation 'junit:junit:4.13.1'
+    implementation rootProject.ext.androidDependencies.kotlinStdlib
+    implementation rootProject.ext.androidDependencies.coreKtx
+    implementation rootProject.ext.dependencies.diskLruCache
+    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
-    api project(path: ':architecture')
-    api project(path: ':cache')
 
 }

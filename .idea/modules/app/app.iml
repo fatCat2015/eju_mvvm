@@ -198,6 +198,7 @@
     <orderEntry type="library" name="Gradle: androidx.interpolator:interpolator:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.annotation:annotation-experimental:1.0.0@aar" level="project" />
     <orderEntry type="module" module-name="architecture" />
+    <orderEntry type="module" module-name="cache" />
     <orderEntry type="module" module-name="service" />
   </component>
 </module>

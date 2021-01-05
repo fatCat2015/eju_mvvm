@@ -1,52 +1,28 @@
 package com.eju.demo.view
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import com.eju.architecture.base.BaseActivity
-import com.eju.architecture.isInUIThread
-import com.eju.architecture.observe
+import com.eju.cache.BitmapCache
 import com.eju.demo.R
 import com.eju.demo.viewmodel.TestViewModel
 import kotlinx.android.synthetic.main.activity_test2.*
-import kotlinx.coroutines.*
 
 class TestActivity : BaseActivity<TestViewModel>(R.layout.activity_test2) {
 
     override fun setListeners() {
         bt1.setOnClickListener {
-            c1.cancel()
+            val bitmap=BitmapFactory.decodeResource(resources,R.drawable.demo)
+            cache.put("${index++}",bitmap)
+            Log.i("sck220", "put ${cache.size()}  ${cache.maxSize()}")
         }
     }
 
-    val scope= CoroutineScope(Dispatchers.Main)
+    private val cache=BitmapCache<String>(60*1024*1024)
 
-    val c1=scope.launch {
-        delay(2000)
-        ensureActive()
-        Log.i("sck220", "initData: 111")
-        "111"
-    }
-
-    val c2=scope.launch {
-        delay(3000)
-        Log.i("sck220", "initData: 222")
-    }
-
-
+    private var index=1
     override fun initData(savedInstanceState: Bundle?) {
-        lifecycleScope.launch {
-            cancel()
-
-        }
-
-
-
-
-
-
-
 
     }
 

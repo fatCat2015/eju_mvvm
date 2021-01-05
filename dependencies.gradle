@@ -79,6 +79,8 @@ ext{
             shimmerLayout             : 'io.supercharge:shimmerlayout:2.1.0',
             //https://github.com/JakeWharton/timber
             timber                    : 'com.jakewharton.timber:timber:4.7.1',
+            //https://github.com/JakeWharton/DiskLruCache
+            diskLruCache              : 'com.jakewharton:disklrucache:2.0.2'
     ]
 
     sdk_dependencies =[

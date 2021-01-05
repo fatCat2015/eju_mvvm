@@ -1,6 +1,7 @@
 package com.eju.demo.api
 
 import com.eju.service.BaseResult
+import com.eju.service.UrlManager
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query

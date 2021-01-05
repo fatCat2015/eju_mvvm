@@ -1,3 +1,4 @@
+include ':cache'
 include ':architecture'
 include ':service'
 include ':app'
