@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.eju.architecture.AppStateTracker
 import com.eju.architecture.BuildConfig
 import com.eju.architecture.currentProcessName
+import com.eju.architecture.util.NetworkManager
 import com.eju.service.ServiceUtil
 import com.imyyq.mvvm.app.AppActivityManager
 import timber.log.Timber
@@ -30,6 +31,7 @@ open class BaseApp:Application() {
             if(BuildConfig.DEBUG){     //log
                 Timber.plant(Timber.DebugTree())
             }
+            NetworkManager.init()  //监听获取网络链接状态
             onMainProcessInit()
         } else {
             // 其他进程初始化

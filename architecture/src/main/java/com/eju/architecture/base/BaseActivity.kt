@@ -2,12 +2,16 @@ package com.eju.architecture.base
 
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.eju.architecture.getViewModel
 import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.observe
+import com.eju.architecture.util.NetworkManager
+import com.eju.architecture.util.NetworkState
 import com.eju.architecture.util.ReflectUtil
+import com.eju.architecture.util.SoftInputUtils
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.lang.reflect.ParameterizedType
@@ -57,12 +61,20 @@ abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCo
         }
         setListeners()
         initData(savedInstanceState)
+        NetworkManager.observe(this){ connected,state->
+            onNetworkStateChanged(connected,state)
+        }
     }
 
 
     abstract fun setListeners()
 
     abstract fun initData(savedInstanceState: Bundle?)
+
+    open fun onNetworkStateChanged(connected:Boolean,newNetworkState: NetworkState){
+
+    }
+
 
     override fun toast(msg: String?) {
         viewImpl.toast(msg)
@@ -90,5 +102,18 @@ abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCo
             lifecycle.removeObserver(viewModel)
         }
     }
+
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        ev?.let {
+            if(it.action== MotionEvent.ACTION_DOWN){
+                if(SoftInputUtils.isShouldHideSoftInput(currentFocus,ev)){
+                    SoftInputUtils.hideSoftInput(currentFocus?.windowToken,this)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
 
 }

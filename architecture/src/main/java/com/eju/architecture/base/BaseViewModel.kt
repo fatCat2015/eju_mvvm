@@ -30,7 +30,6 @@ open class BaseViewModel<M:BaseModel>():ViewModel(), IBaseView,DefaultLifecycleO
     protected val model:M by modelDelegate
 
 
-
     /**
      * 启动一个协程 在协程中处理返回数据
      */

@@ -3,16 +3,11 @@ package com.eju.demo.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.map
 import com.eju.architecture.base.SimpleActivity
-import com.eju.architecture.observe
+import com.eju.architecture.util.NetworkManager
 import com.eju.demo.IMContext
 import com.eju.demo.R
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainActivity : SimpleActivity(R.layout.activity_main) {
 
@@ -37,6 +32,7 @@ class MainActivity : SimpleActivity(R.layout.activity_main) {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        Log.i("NetworkManager", "initData: ${NetworkManager.networkState}")
     }
 
     override fun onDestroy() {

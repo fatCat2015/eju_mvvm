@@ -13,6 +13,7 @@ open class BaseModel {
         }
     }
 
+
     open fun onDestroy(){
 
     }

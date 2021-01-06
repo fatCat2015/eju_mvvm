@@ -2,16 +2,13 @@ package com.eju.architecture
 
 import android.app.ActivityManager
 import android.content.Context
-import android.content.res.Resources
+import android.content.pm.PackageManager
 import android.os.Looper
-import android.util.TypedValue
 import com.eju.architecture.base.BaseApp
 import kotlinx.coroutines.*
-import java.lang.Exception
-import java.lang.StringBuilder
 
+//全局的一些属性
 val application=BaseApp.application
-
 
 /**
  * 获取当前进程的名称，默认进程名称是包名
@@ -30,29 +27,33 @@ val currentProcessName: String?
         return null
     }
 
-fun isInUIThread() = Looper.getMainLooper().thread == Thread.currentThread()
 
-val Float.dp
-    get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,this, Resources.getSystem().displayMetrics)
-
-val Int.dp
-    get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,this.toFloat(), Resources.getSystem().displayMetrics)
-
-fun String?.list(separator:String=","):List<String>{
-    return this?.split(separator)?.filter { it.isNotEmpty() } ?: emptyList()
-}
-
-fun <T> Collection<T>?.fold(separator:String=",",converter:((T)->String)?=null):String{
-    val stringBuilder= StringBuilder()
-    this?.forEach {item->
-        stringBuilder.append(converter?.let { converter.invoke(item) }?:item)
-        stringBuilder.append(separator)
+val versionName:String?
+    get(){
+        return try {
+            application.packageManager.getPackageInfo(application.packageName,0).versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            null
+        }
     }
-    if(stringBuilder.isNotEmpty()){
-        stringBuilder.deleteCharAt(stringBuilder.length-1)
+
+val versionCode:Int?
+    get(){
+        return try {
+            application.packageManager.getPackageInfo(application.packageName,0).versionCode
+        } catch (e: PackageManager.NameNotFoundException) {
+            null
+        }
     }
-    return stringBuilder.toString()
-}
+
+val screenWidth = application.resources.displayMetrics.widthPixels
+
+val screenHeight = application.resources.displayMetrics.heightPixels
+
+
+//全局的一些方法
+
+fun isInMainProcess()= currentProcessName== application.packageName
 
 fun launch(
     onError:((Exception)->Boolean)? = null,
@@ -71,4 +72,9 @@ fun launch(
         }
     }
 }
+
+
+fun isInUIThread() = Looper.getMainLooper().thread == Thread.currentThread()
+
+
 

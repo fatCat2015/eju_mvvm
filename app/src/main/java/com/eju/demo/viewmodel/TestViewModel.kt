@@ -1,6 +1,8 @@
 package com.eju.demo.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.eju.architecture.base.BaseViewModel
 import com.eju.demo.model.TestModel
@@ -10,13 +12,10 @@ import kotlinx.coroutines.launch
 
 class TestViewModel:BaseViewModel<TestModel>() {
 
+    val testLiveData=MutableLiveData<String>()
 
-    fun  aa():LiveData<String> =model.aa()
+
+    fun aa()= model.test()
 
 
-    fun a(){
-        viewModelScope.launch {
-            CancellationException()
-        }
-    }
 }
