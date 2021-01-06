@@ -9,6 +9,7 @@ import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import com.eju.aop.annotation.AvoidMultiExecutions
 import com.eju.architecture.base.BaseActivity
 import com.eju.architecture.observe
 import com.eju.cache.BitmapCache
@@ -21,14 +22,18 @@ class TestActivity : BaseActivity<TestViewModel>(R.layout.activity_test2) {
 
     override fun setListeners() {
         bt1.setOnClickListener {
-            observe(viewModel.aa()){
-                Log.i("sck220", "setListeners: ${it}")
-            }
+            aa()
+        }
+    }
+
+    @AvoidMultiExecutions
+    private fun aa(){
+        observe(viewModel.aa()){
+            Log.i("sck220", "setListeners: ${it}")
         }
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-
 
 
     }

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/aop/aop.iml" filepath="$PROJECT_DIR$/.idea/modules/aop/aop.iml" group="demo/aop" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="demo/app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/architecture/architecture.iml" filepath="$PROJECT_DIR$/.idea/modules/architecture/architecture.iml" group="demo/architecture" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cache/cache.iml" filepath="$PROJECT_DIR$/.idea/modules/cache/cache.iml" group="demo/cache" />
