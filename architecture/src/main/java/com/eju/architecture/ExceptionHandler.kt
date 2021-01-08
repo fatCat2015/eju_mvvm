@@ -1,11 +1,15 @@
 package com.eju.architecture
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.eju.architecture.widget.ToastUtil
 import com.eju.service.ApiException
 import com.eju.service.ServiceUtil
+import kotlinx.coroutines.CoroutineExceptionHandler
 import java.lang.Exception
 import java.util.concurrent.CancellationException
+import kotlin.coroutines.AbstractCoroutineContextElement
+import kotlin.coroutines.CoroutineContext
 
 object ExceptionHandler {
 
@@ -36,5 +40,11 @@ object ExceptionHandler {
                 ToastUtil.toast(any as? LifecycleOwner?,exception?.message)
             }
         }
+    }
+}
+
+class AppCoroutineExceptionHandler: AbstractCoroutineContextElement(CoroutineExceptionHandler), CoroutineExceptionHandler {
+    override fun handleException(context: CoroutineContext, exception: Throwable) {
+        Log.i("sck220", "handleException: ${exception}")
     }
 }

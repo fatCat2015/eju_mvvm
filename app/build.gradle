@@ -56,7 +56,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     api project(path: ':architecture')
-    api project(path: ':cache')
+    implementation project(path: ':cache')
     api project(path: ':aop')
 
 }

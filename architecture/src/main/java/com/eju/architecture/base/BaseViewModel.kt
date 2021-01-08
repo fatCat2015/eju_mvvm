@@ -2,10 +2,12 @@ package com.eju.architecture.base
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.*
+import com.eju.architecture.AppCoroutineExceptionHandler
 import com.eju.architecture.livedata.CountLiveData
 import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.util.ReflectUtil
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import java.lang.Exception
 import java.lang.NullPointerException
 import kotlin.coroutines.CoroutineContext
@@ -35,13 +37,17 @@ open class BaseViewModel<M:BaseRepository>():ViewModel(), IBaseView,DefaultLifec
     protected fun createJob():Job= Job(viewModelScope.coroutineContext[Job])
 
     protected fun <T> liveData(showLoading: Boolean=true,
-                     loadingMsg: String?=null,
-                     onError:((Exception)->Boolean)? = null,
-                     onComplete:(()->Unit)? = null,
-                     block: suspend(Job) -> T
+                               loadingMsg: String?=null,
+                               onError:((Exception)->Boolean)? = null,
+                               onComplete:(()->Unit)? = null,
+                               block: suspend(Job) -> T
     ):LiveData<T>{
         val job=createJob()
         return liveData(context = job+Dispatchers.IO,timeoutInMs = 10000) {
+            if(showLoading){
+                showLoading(loadingMsg)
+            }
+            emit(block(job))
             try {
                 if(showLoading){
                     showLoading(loadingMsg)
@@ -61,14 +67,44 @@ open class BaseViewModel<M:BaseRepository>():ViewModel(), IBaseView,DefaultLifec
     }
 
 
+    protected fun <T> flowLiveData(showLoading: Boolean=true,
+                                loadingMsg: String?=null,
+                                onError:((Exception)->Boolean)? = null,
+                                onComplete:(()->Unit)? = null,
+                                block: (Job) -> Flow<T>
+    ):LiveData<T>{
+        val job=createJob()
+        return block(job)
+            .onStart {
+                if(showLoading){
+                    showLoading(loadingMsg)
+                }
+            }
+            .onCompletion{
+                if(showLoading){
+                    hideLoading()
+                }
+                onComplete?.invoke()
+            }
+            .catch {
+                val e=it as Exception
+                if(onError?.invoke(e)!=true){
+                    showError(e)
+                }
+            }
+            .asLiveData(context = job+Dispatchers.IO,timeoutInMs = 10000)
+
+    }
+
+
     /**
      * 启动一个协程 在协程中处理返回数据
      */
     protected fun launch(showLoading:Boolean=true,
-               loadingMsg:String?=null ,
-               onError:((Exception)->Boolean)? = null,
-               onComplete:(()->Unit)? = null,
-               block: suspend CoroutineScope.() -> Unit
+                         loadingMsg:String?=null ,
+                         onError:((Exception)->Boolean)? = null,
+                         onComplete:(()->Unit)? = null,
+                         block: suspend CoroutineScope.() -> Unit
     ):Job{
         return viewModelScope.launch (Dispatchers.IO){
             try {

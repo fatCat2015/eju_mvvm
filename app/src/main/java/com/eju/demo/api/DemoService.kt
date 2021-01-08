@@ -5,6 +5,7 @@ import com.eju.service.UrlManager
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
+import java.io.Serializable
 
 interface DemoService{
     @GET("/rescue/detail")
@@ -41,4 +42,4 @@ data class HelpDetail(
     var user_name: String = "",
     var view_counts: Int = 0,
     var wx: String = ""
-)
+):Serializable

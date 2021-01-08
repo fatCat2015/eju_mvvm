@@ -25,7 +25,6 @@ data class BaseResult<T>(
 }
 
 
-
 data class PagedList<T>(
     val totalCount:Int,
     val list:List<T>

@@ -35,4 +35,8 @@ dependencies {
     implementation rootProject.ext.dependencies.retrofitUrlManager
     implementation rootProject.ext.dependencies.LoggingInterceptor
 
+    implementation rootProject.ext.androidDependencies.coroutines
+
+    implementation project(path: ':cache')
+
 }

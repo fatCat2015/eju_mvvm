@@ -30,22 +30,12 @@ import org.json.JSONObject
 class TestActivity : BaseActivity<TestViewModel>(R.layout.activity_test2) {
 
     override fun setListeners() {
-        bt1.setOnClickListener {
-//            observe(viewModel.userInfo1){
-//                Log.i("sck220", "userInfo1: ${it}")
-//            }
-            viewModel.query.value="20"
-        }
     }
 
 
 
     override fun initData(savedInstanceState: Bundle?) {
-//        observe(viewModel.userInfo){
-//            Log.i("sck220", "userInfo: ${it}")
-//        }
-
-        observe(viewModel.test1()){
+        observe(viewModel.userInfo){
             Log.i("sck220", "userInfo: ${it}")
         }
 

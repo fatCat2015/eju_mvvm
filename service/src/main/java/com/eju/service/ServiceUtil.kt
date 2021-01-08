@@ -5,6 +5,8 @@ import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -88,6 +90,9 @@ object ServiceUtil {
     fun convertNetException(e:Exception):Exception{
         return exceptionConverter.convert(e)
     }
+
+
+
 
 }
 
