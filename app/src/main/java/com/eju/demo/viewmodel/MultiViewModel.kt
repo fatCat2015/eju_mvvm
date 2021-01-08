@@ -3,27 +3,16 @@ package com.eju.demo.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.eju.architecture.base.BaseViewModel
 import com.eju.demo.api.HelpDetail
-import com.eju.demo.model.MultiModel
+import com.eju.demo.model.MultiRepository
 
-class MultiViewModel:BaseViewModel<MultiModel>() {
+class MultiViewModel:BaseViewModel<MultiRepository>() {
 
-    val neededData=MutableLiveData<HelpDetail>()
-    val neededData1=MutableLiveData<String>()
-
-
-    fun demo1(){
-        launch {
-            val data=model.demo1()
-            neededData.postValue(data)
-        }
-
+    val neededData=liveData {
+        model.demo1()
+    }
+    val neededData1=liveData {
+        model.demo2()
     }
 
-    fun demo2(){
-        launch {
-            val data=model.demo2()
-            neededData1.postValue(data)
-        }
-    }
 
 }

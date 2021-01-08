@@ -6,7 +6,7 @@ import com.eju.service.PagedList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
-abstract class BasePagingViewModel<M:BaseModel,T>( startPage:Int=0, pageSize:Int=10) : BaseViewModel<M>(),IPagingView{
+abstract class BasePagingViewModel<M:BaseRepository,T>(startPage:Int=0, pageSize:Int=10) : BaseViewModel<M>(),IPagingView{
 
     internal val finishRefreshLiveData= CountLiveData()
 

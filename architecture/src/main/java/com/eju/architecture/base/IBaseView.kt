@@ -1,8 +1,10 @@
 package com.eju.architecture.base
 
 import android.app.Activity
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.eju.architecture.ExceptionHandler
+import com.eju.architecture.isInUIThread
 import com.eju.architecture.widget.ToastUtil
 import timber.log.Timber
 import java.lang.Exception
@@ -28,14 +30,15 @@ class IViewDefaultImpl(private val obj:Any?): IBaseView {
 
     override fun showError(exception: Exception?) {
         ExceptionHandler.handle(exception,obj)
+        Log.i("sck220","showError ${isInUIThread()}")
     }
 
     override fun showLoading(msg: String?) {
-        Timber.i("showLoading")
+        Log.i("sck220","showLoading ${isInUIThread()}")
     }
 
     override fun hideLoading() {
-        Timber.i("hideLoading")
+        Log.i("sck220","hideLoading ${isInUIThread()}")
     }
 
     override fun finishPage() {

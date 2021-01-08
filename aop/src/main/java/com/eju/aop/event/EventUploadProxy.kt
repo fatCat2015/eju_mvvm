@@ -11,7 +11,7 @@ object EventUploadProxy : IEventUpload {
         this.eventUpload = eventUpload
     }
 
-    override fun uploadEvent(eventCode:String,event:String,key:String) {
-        eventUpload?.uploadEvent(eventCode, event,key)
+    override fun uploadEvent(evetnName:String,params:JSONObject) {
+        eventUpload?.uploadEvent(evetnName, params)
     }
 }

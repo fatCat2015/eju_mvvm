@@ -33,29 +33,33 @@ public class CheckLoginAspect {
     @Around("methodWithCheckLoginAnnotation()")
     public void checkLogin(final ProceedingJoinPoint joinPoint) throws Throwable {
         LoginCheckProxy.INSTANCE.setCurrentProceedingJoinPoint(joinPoint);
-//        Context context=null;
-//        Object target=joinPoint.getTarget();
-//        if(target instanceof Activity){
-//            context= (Activity) target;
-//        }else if(target instanceof Fragment){
-//            context= ((Fragment) target).getActivity();
-//        }else{
-//            Object[] args = joinPoint.getArgs();
-//            if(args!=null&&args.length>0){
-//                for (Object parameter:args) {
-//                    if(parameter instanceof Context){
-//                        context= (Context) parameter;
-//                        break;
-//                    }
-//                }
-//            }
-//        }
         if(LoginCheckProxy.INSTANCE.isLoggedIn()){
             joinPoint.proceed();
         }else{
             LoginCheckProxy.INSTANCE.startLoginActivity();
 
         }
+    }
+
+    private Context findContext(ProceedingJoinPoint joinPoint) {
+        Context context=null;
+        Object target=joinPoint.getTarget();
+        if(target instanceof Activity){
+            context= (Activity) target;
+        }else if(target instanceof Fragment){
+            context= ((Fragment) target).getActivity();
+        }else{
+            Object[] args = joinPoint.getArgs();
+            if(args!=null&&args.length>0){
+                for (Object parameter:args) {
+                    if(parameter instanceof Context){
+                        context= (Context) parameter;
+                        break;
+                    }
+                }
+            }
+        }
+        return context;
     }
 
 }

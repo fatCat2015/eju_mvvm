@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:textAllCaps="false"
             android:text="一次性接口请求"
-            android:visibility="gone"
             android:layout_height="wrap_content">
         </Button>
 
@@ -29,6 +28,9 @@
             android:text="可重复接口请求"
             android:layout_height="wrap_content">
         </Button>
+
+
+
 
         <Button
             android:id="@+id/bt2"
@@ -55,6 +57,15 @@
 
         <Button
             android:id="@+id/bt5"
+            android:layout_width="match_parent"
+            android:textAllCaps="false"
+            android:text="搜索(单接口取消)"
+            android:layout_height="wrap_content">
+        </Button>
+
+
+        <Button
+            android:id="@+id/btTest"
             android:layout_width="match_parent"
             android:textAllCaps="false"
             android:text="test"

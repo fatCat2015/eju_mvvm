@@ -11,11 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.TestActivity"></activity>
+        <activity android:name=".view.SearchActivity"></activity>
+        <activity android:name=".view.TestActivity" />
         <activity android:name=".view.ListActivity" />
         <activity android:name=".view.MultiApiAct" />
         <activity android:name=".view.OrderDetailAct" />
-        <activity android:name=".view.DetailAct" />
+        <activity android:name=".view.OneShotActivity" />
         <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

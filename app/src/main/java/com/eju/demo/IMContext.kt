@@ -1,7 +1,7 @@
 package com.eju.demo
 
 import android.util.Log
-import com.eju.architecture.base.BaseModel
+import com.eju.architecture.base.BaseRepository
 import com.eju.architecture.launch
 import com.eju.service.BaseResult
 import kotlinx.coroutines.Job
@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 
 object IMContext {
 
-    private val model= ImModel()
+    private val model= ImRepository()
 
     private var job:Job?=null
 
@@ -38,7 +38,7 @@ object IMContext {
 }
 
 
-class ImModel:BaseModel(){
+class ImRepository:BaseRepository(){
     suspend fun loginIm():String{
         return execute {
             delay(2000)

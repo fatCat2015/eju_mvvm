@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="vm"
-            type="com.eju.demo.viewmodel.OrderDetailViewModel" />
+            name="detail"
+            type="com.eju.demo.api.HelpDetail" />
 
     </data>
 
@@ -20,8 +20,8 @@
             android:id="@+id/tvDetail"
             android:layout_width="match_parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:text="@{detail.toString()}"
             android:padding="15dp"
-            android:text="@{vm.orderDetail.toString()}"
             android:layout_height="wrap_content"></TextView>
 
         <Button

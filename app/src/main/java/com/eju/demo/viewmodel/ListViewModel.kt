@@ -3,10 +3,10 @@ package com.eju.demo.viewmodel
 import android.util.Log
 import com.eju.architecture.base.BasePagingViewModel
 import com.eju.architecture.base.PageParams
-import com.eju.demo.model.ListModel
+import com.eju.demo.model.ListRepository
 import kotlinx.coroutines.*
 
-class ListViewModel:BasePagingViewModel<ListModel,String>() {
+class ListViewModel:BasePagingViewModel<ListRepository,String>() {
 
 
 

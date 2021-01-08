@@ -8,8 +8,9 @@ import com.eju.architecture.util.ReflectUtil
 import kotlinx.coroutines.*
 import java.lang.Exception
 import java.lang.NullPointerException
+import kotlin.coroutines.CoroutineContext
 
-open class BaseViewModel<M:BaseModel>():ViewModel(), IBaseView,DefaultLifecycleObserver {
+open class BaseViewModel<M:BaseRepository>():ViewModel(), IBaseView,DefaultLifecycleObserver {
 
     internal val exceptionLiveData=UILiveData<Exception>()
 
@@ -30,16 +31,46 @@ open class BaseViewModel<M:BaseModel>():ViewModel(), IBaseView,DefaultLifecycleO
     protected val model:M by modelDelegate
 
 
+
+    protected fun createJob():Job= Job(viewModelScope.coroutineContext[Job])
+
+    protected fun <T> liveData(showLoading: Boolean=true,
+                     loadingMsg: String?=null,
+                     onError:((Exception)->Boolean)? = null,
+                     onComplete:(()->Unit)? = null,
+                     block: suspend(Job) -> T
+    ):LiveData<T>{
+        val job=createJob()
+        return liveData(context = job+Dispatchers.IO,timeoutInMs = 10000) {
+            try {
+                if(showLoading){
+                    showLoading(loadingMsg)
+                }
+                emit(block(job))
+            } catch (e: Exception) {
+                if(onError?.invoke(e)!=true){
+                    showError(e)
+                }
+            } finally {
+                if(showLoading){
+                    hideLoading()
+                }
+                onComplete?.invoke()
+            }
+        }
+    }
+
+
     /**
      * 启动一个协程 在协程中处理返回数据
      */
-    fun launch(showLoading:Boolean=true,
-                   loadingMsg:String?=null ,
-                   onError:((Exception)->Boolean)? = null,
-                   onComplete:(()->Unit)? = null,
-                   block: suspend CoroutineScope.() -> Unit
+    protected fun launch(showLoading:Boolean=true,
+               loadingMsg:String?=null ,
+               onError:((Exception)->Boolean)? = null,
+               onComplete:(()->Unit)? = null,
+               block: suspend CoroutineScope.() -> Unit
     ):Job{
-        return viewModelScope.launch {
+        return viewModelScope.launch (Dispatchers.IO){
             try {
                 if(showLoading){
                     showLoading(loadingMsg)
@@ -66,8 +97,6 @@ open class BaseViewModel<M:BaseModel>():ViewModel(), IBaseView,DefaultLifecycleO
             model.onDestroy()
         }
     }
-
-
 
     final override fun showLoading(msg: String?) {
         showLoadingLiveData.changeValue(msg)

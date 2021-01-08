@@ -1,8 +1,5 @@
 package com.eju.architecture.util
 
-import android.util.Log
-import com.eju.architecture.base.BaseModel
-import java.lang.NullPointerException
 import java.lang.reflect.ParameterizedType
 
 object ReflectUtil {
