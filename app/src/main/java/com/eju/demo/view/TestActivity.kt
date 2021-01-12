@@ -20,7 +20,6 @@ import com.eju.aop.event.EventUploadProxy
 import com.eju.aop.event.IEventUpload
 import com.eju.architecture.base.BaseActivity
 import com.eju.architecture.observe
-import com.eju.cache.BitmapCache
 import com.eju.demo.R
 import com.eju.demo.viewmodel.TestViewModel
 import kotlinx.android.synthetic.main.activity_test2.*
@@ -30,14 +29,17 @@ import org.json.JSONObject
 class TestActivity : BaseActivity<TestViewModel>(R.layout.activity_test2) {
 
     override fun setListeners() {
+        bt1.setOnClickListener {
+//            observe(viewModel.userInfo){
+//                Log.i("sck220", "userInfo: ${it}")
+//            }
+        }
     }
 
 
 
     override fun initData(savedInstanceState: Bundle?) {
-        observe(viewModel.userInfo){
-            Log.i("sck220", "userInfo: ${it}")
-        }
+
 
     }
 

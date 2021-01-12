@@ -3,7 +3,10 @@ package com.eju.demo
 import android.util.Log
 import com.eju.architecture.base.BaseRepository
 import com.eju.architecture.launch
+import com.eju.demo.api.DemoService
+import com.eju.demo.api.HelpDetail
 import com.eju.service.BaseResult
+import com.eju.service.awaitResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 
@@ -39,11 +42,11 @@ object IMContext {
 
 
 class ImRepository:BaseRepository(){
-    suspend fun loginIm():String{
-        return execute {
+
+    suspend fun loginIm():HelpDetail{
+        return runOnCoroutine {
             delay(2000)
-//            BaseResult("SYS0001","11111111","Success")
-            BaseResult("SYS000","11111111","Success").result
+            getApi(DemoService::class.java).getHelpDetail("58").awaitResult()
         }
     }
 }

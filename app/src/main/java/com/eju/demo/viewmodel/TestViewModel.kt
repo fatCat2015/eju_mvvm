@@ -19,9 +19,9 @@ class TestViewModel:BaseViewModel<TestRepository>() {
 
 
 
-    val userInfo=flowLiveData {
-        model.getUserInfo()
-    }
+//    val userInfo=flowLiveData {
+//        model.getUserInfo()
+//    }
 
 
 }

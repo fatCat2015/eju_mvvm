@@ -18,8 +18,9 @@ class SearchViewModel:BaseViewModel<SearchRepository>() {
     val list:LiveData<List<String>> = query.switchMap {query->
         Log.i("sck220", "关键字发生改变: ${query}")
         searchJob?.cancel()  //取消正在进行的接口
-        liveData(showLoading = false) {job->
-            searchJob=job   //保存job
+        liveData(showLoading = false,onStart = {
+            searchJob = it
+        }) {
             model.searchList(query)    //执行搜索接口
         }
     }

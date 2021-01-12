@@ -19,14 +19,14 @@ class OrderDetailAct : BaseBindingActivity<OrderDetailViewModel,ActivityOrderDet
 
     override fun setListeners() {
         bt.setOnClickListener {
-            observe(viewModel.orderDetail){
-                binding.detail=it
-                Log.i("sck220", "orderDetail: ${it}")
-            }
+            viewModel.refreshOrderDetail()
         }
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-
+        observe(viewModel.orderDetail){
+            binding.detail=it
+            Log.i("sck220", "orderDetail: ${it}")
+        }
     }
 }

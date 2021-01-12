@@ -7,10 +7,14 @@ import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
+import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.NullPointerException
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 object ServiceUtil {
 
@@ -87,7 +91,7 @@ object ServiceUtil {
     }
 
 
-    fun convertNetException(e:Exception):Exception{
+    fun convertNetException(e:Throwable):Throwable{
         return exceptionConverter.convert(e)
     }
 
@@ -129,5 +133,13 @@ class ApiConfig(val baseUrl:String)  {
                 field
             }
         }
+}
+
+suspend fun <T> Call<BaseResult<T>>.awaitResult():T{
+    return try {
+        await().result
+    } catch (e: Exception) {
+        throw ServiceUtil.convertNetException(e)
+    }
 }
 

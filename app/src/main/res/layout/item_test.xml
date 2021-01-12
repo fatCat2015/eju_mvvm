@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="String" />
+            type="com.eju.demo.api.Message" />
 
     </data>
 
@@ -20,7 +20,7 @@
             android:textSize="14sp"
             android:textColor="#333"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{item}"
+            android:text="@{item.commentator_content}"
             android:layout_height="wrap_content">
         </TextView>
 

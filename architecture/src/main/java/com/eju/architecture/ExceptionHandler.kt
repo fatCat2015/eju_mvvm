@@ -17,10 +17,9 @@ object ExceptionHandler {
         if(e==null){
             return
         }
-        val exception=ServiceUtil.convertNetException(e)
-        when{
-            exception is ApiException ->{
-                when(exception.code){
+        when (e) {
+            is ApiException -> {
+                when(e.code){
                     ApiException.codeIsNull->{
                         ToastUtil.toast(any as? LifecycleOwner?,e.message)
                     }
@@ -33,18 +32,12 @@ object ExceptionHandler {
                     }
                 }
             }
-            e is CancellationException->{  //job cancel抛出的异常 暂不处理
+            is CancellationException -> {  //job cancel抛出的异常 暂不处理
 
             }
-            else ->{
-                ToastUtil.toast(any as? LifecycleOwner?,exception?.message)
+            else -> {
+                ToastUtil.toast(any as? LifecycleOwner?,e?.message)
             }
         }
-    }
-}
-
-class AppCoroutineExceptionHandler: AbstractCoroutineContextElement(CoroutineExceptionHandler), CoroutineExceptionHandler {
-    override fun handleException(context: CoroutineContext, exception: Throwable) {
-        Log.i("sck220", "handleException: ${exception}")
     }
 }

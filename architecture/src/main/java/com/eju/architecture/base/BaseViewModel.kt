@@ -2,7 +2,6 @@ package com.eju.architecture.base
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.*
-import com.eju.architecture.AppCoroutineExceptionHandler
 import com.eju.architecture.livedata.CountLiveData
 import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.util.ReflectUtil
@@ -36,23 +35,22 @@ open class BaseViewModel<M:BaseRepository>():ViewModel(), IBaseView,DefaultLifec
 
     protected fun createJob():Job= Job(viewModelScope.coroutineContext[Job])
 
+
     protected fun <T> liveData(showLoading: Boolean=true,
                                loadingMsg: String?=null,
+                               onStart:((Job)->Unit)?=null,
                                onError:((Exception)->Boolean)? = null,
                                onComplete:(()->Unit)? = null,
-                               block: suspend(Job) -> T
+                               block: suspend() -> T
     ):LiveData<T>{
         val job=createJob()
+        onStart?.invoke(job)
         return liveData(context = job+Dispatchers.IO,timeoutInMs = 10000) {
-            if(showLoading){
-                showLoading(loadingMsg)
-            }
-            emit(block(job))
             try {
                 if(showLoading){
                     showLoading(loadingMsg)
                 }
-                emit(block(job))
+                emit(block())
             } catch (e: Exception) {
                 if(onError?.invoke(e)!=true){
                     showError(e)
@@ -68,13 +66,15 @@ open class BaseViewModel<M:BaseRepository>():ViewModel(), IBaseView,DefaultLifec
 
 
     protected fun <T> flowLiveData(showLoading: Boolean=true,
-                                loadingMsg: String?=null,
-                                onError:((Exception)->Boolean)? = null,
-                                onComplete:(()->Unit)? = null,
-                                block: (Job) -> Flow<T>
+                                   loadingMsg: String?=null,
+                                   onStart:((Job)->Unit)?=null,
+                                   onError:((Exception)->Boolean)? = null,
+                                   onComplete:(()->Unit)? = null,
+                                   block:  () -> Flow<T>
     ):LiveData<T>{
         val job=createJob()
-        return block(job)
+        onStart?.invoke(job)
+        return block()
             .onStart {
                 if(showLoading){
                     showLoading(loadingMsg)
@@ -93,6 +93,7 @@ open class BaseViewModel<M:BaseRepository>():ViewModel(), IBaseView,DefaultLifec
                 }
             }
             .asLiveData(context = job+Dispatchers.IO,timeoutInMs = 10000)
+
 
     }
 

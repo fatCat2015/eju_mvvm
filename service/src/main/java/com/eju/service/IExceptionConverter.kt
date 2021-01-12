@@ -12,7 +12,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 interface IExceptionConverter {
-    fun convert(e:Exception):Exception
+    fun convert(e:Throwable):Throwable
 }
 
 class ExceptionConverter:IExceptionConverter{
@@ -20,11 +20,11 @@ class ExceptionConverter:IExceptionConverter{
     /**
      * 转化一些异常信息为用户能读懂的信息
      */
-    override fun convert(e:Exception):Exception{
+    override fun convert(e:Throwable):Throwable{
         return convertException(e)
     }
 
-    private fun convertException(e:Exception):Exception{
+    private fun convertException(e:Throwable):Throwable{
         val application=ServiceUtil.application
         var msg :String? =null
         when{

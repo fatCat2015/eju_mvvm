@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.eju.demo.api.HelpDetail
+import com.eju.demo.api.Message
 import com.eju.demo.databinding.ItemTestBinding
 
-class TestAdapter(private val list:List<String>?):RecyclerView.Adapter<TestViewHolder>() {
+class TestAdapter(private val list:List<Message>?):RecyclerView.Adapter<TestViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TestViewHolder {
         return TestViewHolder(
