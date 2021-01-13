@@ -1,9 +1,9 @@
 package com.eju.cache
 
 import android.graphics.Bitmap
-import android.util.Log
+import com.eju.cache.core.MemoryCache
 
-class BitmapCache<K>(maxSize:Int):MemoryCache<K,Bitmap>(
+class BitmapCache<K>(maxSize:Int): MemoryCache<K, Bitmap>(
     objSizeCalculator={key,value ->(value.allocationByteCount)},
     maxSize=maxSize,
     onEntryRemoved = {evicted,_,oldValue,_->

@@ -6,15 +6,11 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.flow.toList
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager
 import okhttp3.OkHttpClient
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.NullPointerException
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 object ServiceUtil {
 
@@ -142,4 +138,3 @@ suspend fun <T> Call<BaseResult<T>>.awaitResult():T{
         throw ServiceUtil.convertNetException(e)
     }
 }
-

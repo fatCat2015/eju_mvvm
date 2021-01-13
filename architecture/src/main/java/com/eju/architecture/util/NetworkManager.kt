@@ -6,6 +6,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.eju.architecture.application
 import com.eju.architecture.livedata.UILiveData
@@ -16,9 +17,7 @@ object NetworkManager {
 
     private var networkStateLiveData = UILiveData<NetworkState>()
 
-    val networkState:NetworkState get() {
-        return networkStateLiveData.value?:NetworkState.NONE
-    }
+    var networkState = NetworkState.NONE
 
     fun networkConnected()=networkState!=NetworkState.NONE
 
@@ -28,12 +27,16 @@ object NetworkManager {
             ConnectivityManager.NetworkCallback(){
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-//                Timber.i( "onAvailable: ")
+//                Timber.i( "onAvailable: ${Thread.currentThread().id}")
+                val networkCapabilities=connectivityManager.getNetworkCapabilities(network)
+                networkCapabilities?.let { networkCapabilities->
+                    onNetworkStateChanged(getConnectedNetworkState(networkCapabilities))
+                }?: onNetworkStateChanged(NetworkState.OTHER)
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
-//                Timber.i( "onLost: ")
+//                Timber.i( "onLost: ${Thread.currentThread().id}")
                 onNetworkStateChanged(NetworkState.NONE)
             }
 
@@ -42,17 +45,8 @@ object NetworkManager {
                 networkCapabilities: NetworkCapabilities
             ) {
                 super.onCapabilitiesChanged(network, networkCapabilities)
-                if(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)){
-                    if(networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)||
-                        networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE)){
-//                        Timber.i(  "onCapabilitiesChanged wifi: ${networkCapabilities}")
-                        onNetworkStateChanged(NetworkState.WIFI)
-                    }else{
-//                        Timber.i(  "onCapabilitiesChanged mobile: ${networkCapabilities}")
-                        onNetworkStateChanged(NetworkState.MOBILE)
-                    }
-                }
-
+//                Timber.i( "onCapabilitiesChanged:  ${Thread.currentThread().id}")
+                onNetworkStateChanged(getConnectedNetworkState(networkCapabilities))
             }
         }
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
@@ -62,10 +56,21 @@ object NetworkManager {
         }
     }
 
+    private fun getConnectedNetworkState(networkCapabilities: NetworkCapabilities):NetworkState{
+        return when{
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ->NetworkState.WIFI
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ->NetworkState.MOBILE
+            else ->NetworkState.OTHER
+        }
+    }
+
+
+
     private fun onNetworkStateChanged(newNetworkState: NetworkState){
         if(newNetworkState!= networkState){
             val oldNetworkState= networkState
             Timber.i("onNetworkStateChanged ${oldNetworkState}  ${newNetworkState}")
+            this.networkState=newNetworkState
             this.networkStateLiveData.changeValue(newNetworkState)
         }
     }
@@ -82,4 +87,5 @@ enum class NetworkState{
     NONE,
     WIFI,
     MOBILE,
+    OTHER,
 }

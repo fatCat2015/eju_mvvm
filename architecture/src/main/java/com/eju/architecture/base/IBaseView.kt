@@ -30,7 +30,6 @@ class IViewDefaultImpl(private val obj:Any?): IBaseView {
 
     override fun showError(exception: Exception?) {
         ExceptionHandler.handle(exception,obj)
-        Log.i("sck220","showError ${isInUIThread()}")
     }
 
     override fun showLoading(msg: String?) {
@@ -40,6 +39,8 @@ class IViewDefaultImpl(private val obj:Any?): IBaseView {
     override fun hideLoading() {
         Log.i("sck220","hideLoading ${isInUIThread()}")
     }
+
+
 
     override fun finishPage() {
         if(obj is Activity){

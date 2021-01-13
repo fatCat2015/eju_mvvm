@@ -1,12 +1,15 @@
 package com.eju.architecture.base
 
+import com.eju.architecture.util.NetworkManager
+import com.eju.cache.CacheConfig
+import com.eju.cache.CacheStrategy
 import com.eju.service.BaseResult
 import com.eju.service.ServiceUtil
 import com.eju.service.ServiceCache
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import retrofit2.Call
-import java.util.concurrent.TimeUnit
 
 open class BaseRepository {
 
@@ -18,24 +21,24 @@ open class BaseRepository {
         }
     }
 
-
-    suspend fun <T> useCacheIfExits(cachedTime:Long?=null, cachedTimeUnit: TimeUnit?=null,
-                                    block:()-> Call<BaseResult<T>>
-    ):T{
-        return ServiceCache.useCacheIfExits(cachedTime,cachedTimeUnit,block)
+    protected fun <T> firstCacheThenRemote(cacheConfig: CacheConfig= CacheConfig.DEFAULT, block:()-> Call<BaseResult<T>>):Flow<T>{
+        return ServiceCache.getData(NetworkManager.networkConnected(), cacheConfig,
+            CacheStrategy.FIRST_CACHE_THEN_REMOTE,block)
     }
 
-
-    fun <T> firstCacheThenRemote(cachedTime:Long?=null, cachedTimeUnit: TimeUnit?=null,
-                                 block: ()->Call<BaseResult<T>>
-    ):Flow<T>{
-        return ServiceCache.firstCacheThenRemote(cachedTime,cachedTimeUnit,block)
+    /**
+     * @param cacheStrategy 除了CacheStrategy.FIRST_CACHE_THEN_REMOTE (使用firstCacheThenRemote())
+     */
+    protected suspend fun <T> fromCache(cacheConfig: CacheConfig, cacheStrategy: CacheStrategy, block:()-> Call<BaseResult<T>>):T{
+        return ServiceCache.getData(NetworkManager.networkConnected(), cacheConfig,cacheStrategy,block).first()
     }
 
-
-
-
-
+    protected suspend fun <T> fromCache(block:()-> Call<BaseResult<T>>):T{
+        return fromCache(
+            CacheConfig.DEFAULT,
+            CacheStrategy.USE_CACHE_IF_REMOTE_FAILED,
+            block)
+    }
 
     open fun onDestroy(){
 

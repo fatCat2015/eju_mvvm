@@ -12,6 +12,7 @@ import com.eju.architecture.util.NetworkManager
 import com.eju.architecture.util.NetworkState
 import com.eju.architecture.util.ReflectUtil
 import com.eju.architecture.util.SoftInputUtils
+import timber.log.Timber
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.lang.reflect.ParameterizedType
@@ -72,7 +73,6 @@ abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCo
     abstract fun initData(savedInstanceState: Bundle?)
 
     open fun onNetworkStateChanged(connected:Boolean,newNetworkState: NetworkState){
-
     }
 
 

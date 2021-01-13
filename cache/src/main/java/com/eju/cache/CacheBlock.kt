@@ -7,12 +7,8 @@ class CacheBlock<T>(
     private val expiredTime:Long,
 ): Serializable {
 
-    companion object{
-        const val CACHED_FOREVER=-1L
-    }
-
     fun isOutOfDate():Boolean{
-        return expiredTime!= CACHED_FOREVER &&(System.currentTimeMillis()-expiredTime>0)
+        return expiredTime!= CacheConfig.CACHED_FOREVER &&(System.currentTimeMillis()-expiredTime>0)
     }
 }
 

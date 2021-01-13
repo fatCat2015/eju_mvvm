@@ -39,6 +39,9 @@ class MainActivity : SimpleActivity(R.layout.activity_main) {
         bt5.setOnClickListener {
             startActivity(Intent(this, SearchActivity::class.java))
         }
+        bt6.setOnClickListener {
+            startActivity(Intent(this, CacheActivity::class.java))
+        }
     }
 
     override fun initData(savedInstanceState: Bundle?) {

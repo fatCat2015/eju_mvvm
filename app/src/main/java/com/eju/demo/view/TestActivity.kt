@@ -24,6 +24,9 @@ import com.eju.demo.R
 import com.eju.demo.viewmodel.TestViewModel
 import kotlinx.android.synthetic.main.activity_test2.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import org.json.JSONObject
 
 class TestActivity : BaseActivity<TestViewModel>(R.layout.activity_test2) {
@@ -33,7 +36,11 @@ class TestActivity : BaseActivity<TestViewModel>(R.layout.activity_test2) {
 //            observe(viewModel.userInfo){
 //                Log.i("sck220", "userInfo: ${it}")
 //            }
+            test()
         }
+    }
+
+    private fun test(){
     }
 
 

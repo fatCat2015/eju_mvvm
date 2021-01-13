@@ -1,40 +1,36 @@
 package com.eju.service
 
 import com.eju.cache.CacheBlock
+import com.eju.cache.CacheConfig
 import com.eju.cache.CacheProxy
+import com.eju.cache.CacheStrategy
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.first
 import okhttp3.FormBody
 import okhttp3.Request
 import retrofit2.Call
 import java.lang.StringBuilder
+import java.net.ConnectException
 import java.util.concurrent.TimeUnit
 
 
 object ServiceCache {
 
+
     private val cacheProxy:CacheProxy by lazy {
         CacheProxy(ServiceUtil.application)
     }
 
-    suspend fun <T> useCacheIfExits(cachedTime:Long?=null, cachedTimeUnit: TimeUnit?=null,
-                                    block:()-> Call<BaseResult<T>>
-    ):T{
+    fun <T> getData(networkConnected:Boolean=true,cacheConfig: CacheConfig,cacheStrategy: CacheStrategy, block:()-> Call<BaseResult<T>>):Flow<T>{
         val call=block()
         val cachedKey=generateCachedKey(call.request())
-        return cacheProxy.useCacheIfExits(cachedKey,cachedTime?:CacheBlock.CACHED_FOREVER,cachedTimeUnit?:TimeUnit.MILLISECONDS,block={
-            call.awaitResult()
+        return cacheProxy.getData(cachedKey,cacheConfig,cacheStrategy,block = {
+            if(networkConnected){
+                call.awaitResult()
+            }else{
+                throw ConnectException(ServiceUtil.application.getString(R.string.ConnectException))
+            }
         })
-    }
-
-    fun <T> firstCacheThenRemote(cachedTime:Long?=null, cachedTimeUnit: TimeUnit?=null,
-                                 block:()->Call<BaseResult<T>>
-    ):Flow<T>{
-        val call=block()
-        val cachedKey=generateCachedKey(call.request())
-        return cacheProxy.firstCacheThenRemote(cachedKey,cachedTime?:CacheBlock.CACHED_FOREVER,cachedTimeUnit?:TimeUnit.MILLISECONDS) {
-            call.awaitResult()
-        }
     }
 
 

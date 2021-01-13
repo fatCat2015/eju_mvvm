@@ -68,5 +68,6 @@ dependencies {
     api rootProject.ext.dependencies.timber
 
     api project(path: ':service')
+    api project(path: ':cache')
 
 }
