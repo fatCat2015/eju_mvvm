@@ -17,18 +17,18 @@ object ExceptionHandler {
         if(e==null){
             return
         }
-        when (e) {
+        when (val exception=ServiceUtil.convertNetException(e)) {
             is ApiException -> {
-                when(e.code){
+                when(exception.code){
                     ApiException.codeIsNull->{
-                        ToastUtil.toast(any as? LifecycleOwner?,e.message)
+                        ToastUtil.toast(any as? LifecycleOwner?,exception.message)
                     }
                     ApiException.kickedOut->{
                         //todo
                     }
                     //todo other code
                     else ->{
-                        ToastUtil.toast(any as? LifecycleOwner?,e.message)
+                        ToastUtil.toast(any as? LifecycleOwner?,exception.message)
                     }
                 }
             }
@@ -36,7 +36,7 @@ object ExceptionHandler {
 
             }
             else -> {
-                ToastUtil.toast(any as? LifecycleOwner?,e?.message)
+                ToastUtil.toast(any as? LifecycleOwner?,exception?.message)
             }
         }
     }

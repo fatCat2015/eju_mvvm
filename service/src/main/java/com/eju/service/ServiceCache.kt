@@ -16,9 +16,18 @@ import java.util.concurrent.TimeUnit
 
 object ServiceCache {
 
-
     private val cacheProxy:CacheProxy by lazy {
         CacheProxy(ServiceUtil.application)
+    }
+
+    fun <T> getData(cachedKey:String,networkConnected:Boolean=true,cacheConfig: CacheConfig,cacheStrategy: CacheStrategy, block:suspend ()-> BaseResult<T>):Flow<T>{
+        return cacheProxy.getData(cachedKey,cacheConfig,cacheStrategy,block = {
+            if(networkConnected){
+                block().result
+            }else{
+                throw ConnectException(ServiceUtil.application.getString(R.string.ConnectException))
+            }
+        })
     }
 
     fun <T> getData(networkConnected:Boolean=true,cacheConfig: CacheConfig,cacheStrategy: CacheStrategy, block:()-> Call<BaseResult<T>>):Flow<T>{

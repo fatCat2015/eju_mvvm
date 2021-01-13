@@ -15,7 +15,7 @@ class OrderDetailRepository:BaseRepository() {
     //返回接口的数据 并且进行处理的数据
     suspend fun orderDetail(id:String):HelpDetail{
         delay(2000)
-        return getApi(DemoService::class.java).getHelpDetail(id).awaitResult()
+        return getApi(DemoService::class.java).getHelpDetail1(id).result
             //处理数据
             .let {
                 it.title="111111111"

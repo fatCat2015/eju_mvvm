@@ -40,6 +40,27 @@ open class BaseRepository {
             block)
     }
 
+
+
+    protected fun <T> firstCacheThenRemote(key:String,cacheConfig: CacheConfig= CacheConfig.DEFAULT, block:suspend ()-> BaseResult<T>):Flow<T>{
+        return ServiceCache.getData(key,NetworkManager.networkConnected(), cacheConfig,
+            CacheStrategy.FIRST_CACHE_THEN_REMOTE,block)
+    }
+
+    /**
+     * @param cacheStrategy 除了CacheStrategy.FIRST_CACHE_THEN_REMOTE (使用firstCacheThenRemote())
+     */
+    protected suspend fun <T> fromCache(key:String,cacheConfig: CacheConfig, cacheStrategy: CacheStrategy, block:suspend ()-> BaseResult<T>):T{
+        return ServiceCache.getData(key,NetworkManager.networkConnected(), cacheConfig,cacheStrategy,block).first()
+    }
+
+    protected suspend fun <T> fromCache(key:String,block:suspend ()-> BaseResult<T>):T{
+        return fromCache(key,
+            CacheConfig.DEFAULT,
+            CacheStrategy.USE_CACHE_IF_REMOTE_FAILED,
+            block)
+    }
+
     open fun onDestroy(){
 
     }

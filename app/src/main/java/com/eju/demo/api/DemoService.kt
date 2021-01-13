@@ -10,13 +10,15 @@ import java.io.Serializable
 
 interface DemoService{
 
-    companion object{
-        const val a=""
-    }
 
     @GET("/rescue/detail")
     @Headers("version:1.0.9")
     fun getHelpDetail(@Query("rescue_id") id:String): Call<BaseResult<HelpDetail>>
+
+
+    @GET("/rescue/detail")
+    @Headers("version:1.0.9")
+    suspend fun getHelpDetail1(@Query("rescue_id") id:String): BaseResult<HelpDetail>
 
 
     @FormUrlEncoded

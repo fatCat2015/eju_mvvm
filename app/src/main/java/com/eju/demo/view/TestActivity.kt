@@ -2,6 +2,8 @@ package com.eju.demo.view
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -20,6 +22,7 @@ import com.eju.aop.event.EventUploadProxy
 import com.eju.aop.event.IEventUpload
 import com.eju.architecture.base.BaseActivity
 import com.eju.architecture.observe
+import com.eju.architecture.widget.PaletteHelper
 import com.eju.demo.R
 import com.eju.demo.viewmodel.TestViewModel
 import kotlinx.android.synthetic.main.activity_test2.*
@@ -33,14 +36,11 @@ class TestActivity : BaseActivity<TestViewModel>(R.layout.activity_test2) {
 
     override fun setListeners() {
         bt1.setOnClickListener {
-//            observe(viewModel.userInfo){
-//                Log.i("sck220", "userInfo: ${it}")
-//            }
-            test()
         }
     }
 
     private fun test(){
+        supportFragmentManager
     }
 
 

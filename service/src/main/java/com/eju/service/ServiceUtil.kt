@@ -92,8 +92,6 @@ object ServiceUtil {
     }
 
 
-
-
 }
 
 
@@ -132,9 +130,5 @@ class ApiConfig(val baseUrl:String)  {
 }
 
 suspend fun <T> Call<BaseResult<T>>.awaitResult():T{
-    return try {
-        await().result
-    } catch (e: Exception) {
-        throw ServiceUtil.convertNetException(e)
-    }
+    return await().result
 }

@@ -13,4 +13,21 @@
         android:layout_height="wrap_content">
     </Button>
 
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:src="@drawable/demo"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toBottomOf="@id/bt1"
+        android:layout_height="wrap_content">
+    </ImageView>
+
+    <View
+        android:id="@+id/vColor"
+        app:layout_constraintTop_toBottomOf="@id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+    </View>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
