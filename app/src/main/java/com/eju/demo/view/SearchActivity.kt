@@ -6,10 +6,11 @@ import android.util.Log
 import com.eju.architecture.base.BaseActivity
 import com.eju.architecture.observe
 import com.eju.demo.R
+import com.eju.demo.databinding.ActivitySearchBinding
 import com.eju.demo.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.activity_search.*
 
-class SearchActivity : BaseActivity<SearchViewModel>(R.layout.activity_search) {
+class SearchActivity : BaseActivity<SearchViewModel,ActivitySearchBinding>(R.layout.activity_search) {
 
     override fun setListeners() {
         bt.setOnClickListener {

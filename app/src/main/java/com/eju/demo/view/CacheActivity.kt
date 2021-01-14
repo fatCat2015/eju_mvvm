@@ -6,10 +6,11 @@ import android.util.Log
 import com.eju.architecture.base.BaseActivity
 import com.eju.architecture.observe
 import com.eju.demo.R
+import com.eju.demo.databinding.ActivityCacheBinding
 import com.eju.demo.viewmodel.CacheViewModel
 import kotlinx.android.synthetic.main.activity_cache.*
 
-class CacheActivity : BaseActivity<CacheViewModel>(R.layout.activity_cache) {
+class CacheActivity : BaseActivity<CacheViewModel,ActivityCacheBinding>(R.layout.activity_cache) {
     override fun setListeners() {
 
         bt0.setOnClickListener {

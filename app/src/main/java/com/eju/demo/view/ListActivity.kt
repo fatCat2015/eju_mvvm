@@ -12,10 +12,11 @@ import com.eju.architecture.getViewModel
 import com.eju.architecture.observe
 import com.eju.demo.R
 import com.eju.demo.TestAdapter
+import com.eju.demo.databinding.ActivityListBinding
 import com.eju.demo.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.activity_list.*
 
-class ListActivity : BasePagingActivity<ListViewModel>(R.layout.activity_list) {
+class ListActivity : BasePagingActivity<ListViewModel,ActivityListBinding>(R.layout.activity_list) {
 
     private var adapter:TestAdapter?=null
 

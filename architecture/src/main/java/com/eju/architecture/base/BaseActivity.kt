@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.ViewDataBinding
 import com.eju.architecture.getViewModel
 import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.observe
@@ -17,7 +19,7 @@ import java.lang.Exception
 import java.lang.NullPointerException
 import java.lang.reflect.ParameterizedType
 
-abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCompatActivity(), IBaseView {
+abstract class BaseActivity<VM:BaseViewModel<*>,B:ViewDataBinding>(@LayoutRes layoutId:Int):DataBindingActivity<B>(layoutId), IBaseView {
 
     private val viewImpl: IBaseView by lazy{
         IViewDefaultImpl(this)
@@ -57,9 +59,6 @@ abstract class BaseActivity<VM:BaseViewModel<*>>(private val layoutId:Int):AppCo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(layoutId!=0){
-            setContentView(layoutId)
-        }
         setListeners()
         initData(savedInstanceState)
         NetworkManager.observe(this){ connected,state->

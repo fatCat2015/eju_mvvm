@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import java.util.*
@@ -17,19 +19,26 @@ object ShowOneDialogHandler{
         mutableMapOf<FragmentManager,LinkedList<DialogFragment>>()
     }
 
+    fun show(fragmentActivity: FragmentActivity,dialog: DialogFragment){
+        show(fragmentActivity,fragmentActivity.supportFragmentManager,dialog)
+    }
 
-    fun show(lifecycleOwner: LifecycleOwner,fragmentManager: FragmentManager,dialog: DialogFragment){
+    fun show(fragment: Fragment,dialog: DialogFragment){
+        show(fragment,fragment.childFragmentManager,dialog)
+    }
+
+    private fun show(lifecycleOwner: LifecycleOwner,fragmentManager: FragmentManager,dialog: DialogFragment){
         val dialogList=dialogMap[fragmentManager]?:LinkedList<DialogFragment>().also {
             lifecycleOwner.lifecycle.addObserver(object:DefaultLifecycleObserver{
                 override fun onDestroy(owner: LifecycleOwner) {
-                    dialogMap.remove(fragmentManager)
+                    dialogMap.remove(fragmentManager)?.clear()
                 }
             })
             dialogMap[fragmentManager]=it
         }
         dialogList.addFirst(dialog)
         dialog.lifecycle.addObserver(dialogLifecycleObserver)
-        if(dialogList.isEmpty()){
+        if(dialogList.size==1){
             showDialogAllowingStateLoss(fragmentManager,dialog)
         }
     }
@@ -42,7 +51,7 @@ object ShowOneDialogHandler{
                     val fragmentManager=entry.key
                     val dialogList=entry.value
                     dialogList.remove(owner)
-                    if(!dialogList.isEmpty()){
+                    if(dialogList.isNotEmpty()){
                         val nextDialog=dialogList.last()
                         showDialogAllowingStateLoss(fragmentManager,nextDialog)
                     }

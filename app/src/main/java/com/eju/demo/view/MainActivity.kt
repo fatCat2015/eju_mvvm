@@ -2,16 +2,11 @@ package com.eju.demo.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
-import androidx.lifecycle.lifecycleScope
+import com.eju.architecture.base.NoVMActivity
 import com.eju.architecture.base.SimpleActivity
-import com.eju.architecture.util.NetworkManager
 import com.eju.demo.IMContext
 import com.eju.demo.R
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.delay
-import timber.log.Timber
 
 class MainActivity : SimpleActivity(R.layout.activity_main) {
 
@@ -41,6 +36,9 @@ class MainActivity : SimpleActivity(R.layout.activity_main) {
         }
         bt6.setOnClickListener {
             startActivity(Intent(this, CacheActivity::class.java))
+        }
+        bt7.setOnClickListener {
+            startActivity(Intent(this, FragmentDemoActivity::class.java))
         }
     }
 

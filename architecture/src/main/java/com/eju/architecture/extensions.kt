@@ -3,6 +3,9 @@ package com.eju.architecture
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.lifecycle.*
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 import java.lang.Exception
 import java.lang.StringBuilder
@@ -59,6 +62,22 @@ fun <T> Collection<T>?.fold(separator:String=",",converter:((T)->String)?=null):
         stringBuilder.deleteCharAt(stringBuilder.length-1)
     }
     return stringBuilder.toString()
+}
+
+fun TabLayout.setUpWithViewPager2(viewPager2: ViewPager2,titles:List<CharSequence>){
+    TabLayoutMediator(this,viewPager2,true,true,
+        TabLayoutMediator.TabConfigurationStrategy { tab, position ->
+            if(position in titles.indices){
+                tab.text = titles[position]
+            }
+        }).attach()
+}
+
+fun TabLayout.setUpWithViewPager2(viewPager2: ViewPager2,onConfigureTab:(TabLayout.Tab,Int)->Unit){
+    TabLayoutMediator(this,viewPager2,true,true,
+        TabLayoutMediator.TabConfigurationStrategy { tab, position ->
+            onConfigureTab.invoke(tab,position)
+        }).attach()
 }
 
 

@@ -1,8 +1,10 @@
 package com.eju.architecture.base
 
+import androidx.annotation.LayoutRes
+import androidx.databinding.ViewDataBinding
 import com.eju.architecture.observe
 
-abstract class BasePagingActivity<VM:BasePagingViewModel<*,*>>(layoutId:Int):BaseActivity<VM>(layoutId),IPagingView {
+abstract class BasePagingActivity<VM:BasePagingViewModel<*,*>,B:ViewDataBinding>(@LayoutRes layoutId:Int):BaseActivity<VM,B>(layoutId),IPagingView {
 
 
     override fun observeViewBehavior(viewModel: VM) {

@@ -1,38 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.MultiApiAct">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <Button
-        android:id="@+id/bt0"
-        android:text="refresh"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toTopOf="parent"
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </Button>
+        android:layout_height="match_parent"
+        tools:context=".view.MultiApiAct">
 
-    <Button
-        android:id="@+id/bt1"
-        android:text="loadMore"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/bt0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </Button>
+        <Button
+            android:id="@+id/bt0"
+            android:text="refresh"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Button>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv"
-        app:layout_constraintTop_toBottomOf="@id/bt1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-    </androidx.recyclerview.widget.RecyclerView>
+        <Button
+            android:id="@+id/bt1"
+            android:text="loadMore"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/bt0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Button>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            app:layout_constraintTop_toBottomOf="@id/bt1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"></androidx.recyclerview.widget.RecyclerView>
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
