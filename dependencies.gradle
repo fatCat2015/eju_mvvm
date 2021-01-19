@@ -7,7 +7,8 @@ ext{
             targetSdkVersion  :  30,
             versionCode       :  1,
             versionName       :  "1.0.0",
-            lifecycleVersion  :  "2.2.0"
+            lifecycleVersion  :  "2.2.0",
+            applicationId     :  "com.eju.app"
     ]
 
 
@@ -80,7 +81,11 @@ ext{
             //https://github.com/JakeWharton/timber
             timber                    : 'com.jakewharton.timber:timber:4.7.1',
             //https://github.com/JakeWharton/DiskLruCache
-            diskLruCache              : 'com.jakewharton:disklrucache:2.0.2'
+            diskLruCache              : 'com.jakewharton:disklrucache:2.0.2',
+            //aRouter https://github.com/alibaba/ARouter/blob/master/README_CN.md
+            aRouter                   : 'com.alibaba:arouter-api:1.5.1',
+            aRouterCompiler           : 'com.alibaba:arouter-compiler:1.5.1',
+
     ]
 
     sdk_dependencies =[

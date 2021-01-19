@@ -1,28 +1,20 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'android-aspectjx'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.eju.demo"
+        applicationId rootProject.ext.android.applicationId
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
+
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    dataBinding{
-        enabled true
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 
 
@@ -33,6 +25,14 @@ android {
         }
     }
 
+    dataBinding{
+        enabled true
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -40,28 +40,22 @@ android {
 }
 
 
-aspectjx {
-    exclude 'com.umeng.commonsdk'
-    exclude 'com.umeng.analytics'
-    exclude 'com.tencent.bugly'
-    exclude 'com.alipay.sdk'
-    exclude 'com.tencent.mm.opensdk'
-    exclude 'cn.jpush'
-    exclude 'cn.jcore'
-    exclude 'versions.9'
-    enabled true    //aop开关
-}
+
+
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    api project(path: ':architecture')
-    api project(path: ':aop')
+    implementation project(path: ':architecture')
+
+    if(!isModule.toBoolean()){
+        implementation project(path: ':module1')
+        implementation project(path: ':module2')
+    }
+
 
 
 }

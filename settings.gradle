@@ -1,6 +1,8 @@
+include ':module2'
+include ':app'
 include ':aop'
 include ':cache'
 include ':architecture'
 include ':service'
-include ':app'
+include ':module1'
 rootProject.name = "demo"

@@ -7,6 +7,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/architecture/architecture.iml" filepath="$PROJECT_DIR$/.idea/modules/architecture/architecture.iml" group="demo/architecture" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cache/cache.iml" filepath="$PROJECT_DIR$/.idea/modules/cache/cache.iml" group="demo/cache" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/demo.iml" filepath="$PROJECT_DIR$/.idea/modules/demo.iml" group="demo" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/module1.iml" filepath="$PROJECT_DIR$/.idea/modules/app/module1.iml" group="demo/module1" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module2/module2.iml" filepath="$PROJECT_DIR$/.idea/modules/module2/module2.iml" group="demo/module2" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/network/service.iml" filepath="$PROJECT_DIR$/.idea/modules/network/service.iml" group="demo/service" />
     </modules>
   </component>

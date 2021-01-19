@@ -5,8 +5,6 @@ import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.toList
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager
 import okhttp3.OkHttpClient
 import retrofit2.*
@@ -22,10 +20,9 @@ object ServiceUtil {
 
     private val serviceCacheMap= mutableMapOf<Class<*>,Any>()
 
-    private val exceptionConverter:IExceptionConverter by lazy{
-        ExceptionConverter()
+    private val exceptionConverter: HttpExceptionConverter by lazy{
+        DefaultHttpExceptionConverter()
     }
-
 
     fun addRequestHeader(key:String,value:String){
         requestHeaders[key] = value
@@ -127,6 +124,7 @@ class ApiConfig(val baseUrl:String)  {
                 field
             }
         }
+
 }
 
 suspend fun <T> Call<BaseResult<T>>.awaitResult():T{

@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
+@Deprecated("use ViewPager2 instead ViewPager")
 class SimpleFragmentAdapter(private val fragmentList: List<Fragment>, fm: FragmentManager, var titles:List<String>?=null)
     : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 

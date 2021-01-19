@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.eju.demo">
+
+    <application>
+        <activity android:name=".view.FragmentDemoActivity"></activity>
+        <activity android:name=".view.CacheActivity" />
+        <activity android:name=".view.SearchActivity" />
+        <activity android:name=".view.TestActivity" />
+        <activity android:name=".view.ListActivity" />
+        <activity android:name=".view.MultiApiAct" />
+        <activity android:name=".view.OrderDetailAct" />
+        <activity android:name=".view.OneShotActivity" />
+        <activity android:name=".view.MainActivity">
+        </activity>
+    </application>
+
+</manifest>

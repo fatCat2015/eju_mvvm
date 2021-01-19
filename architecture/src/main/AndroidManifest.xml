@@ -21,6 +21,38 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".router.SchemeFilterActivity"
+            android:screenOrientation="portrait"
+            >
+            <!-- Scheme -->
+            <intent-filter>
+                <data
+                    android:host="mobile.app.yilou"
+                    android:scheme="eju"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+
+            <!-- App Links -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="jiandanhome.com"
+                    android:scheme="http"/>
+                <data
+                    android:host="jiandanhome.com"
+                    android:scheme="https"/>
+            </intent-filter>
+
+        </activity>
+
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package com.eju.architecture.base
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import com.alibaba.android.arouter.launcher.ARouter
 import com.eju.architecture.AppStateTracker
 import com.eju.architecture.BuildConfig
 import com.eju.architecture.currentProcessName
@@ -32,6 +33,13 @@ open class BaseApp:Application() {
                 Timber.plant(Timber.DebugTree())
             }
             NetworkManager.init()  //监听获取网络链接状态
+
+            if(BuildConfig.DEBUG){  //ARouter
+                ARouter.openLog()
+                ARouter.openDebug()
+            }
+            ARouter.init(this)
+
             onMainProcessInit()
         } else {
             // 其他进程初始化

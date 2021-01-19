@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
 
     <string name="loading" >加载中...</string>
+    <string name="app_name" >mvvm</string>
 </resources>

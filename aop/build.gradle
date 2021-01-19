@@ -31,6 +31,18 @@ android {
     }
 }
 
+//aspectjx {
+//    exclude 'com.umeng.commonsdk'
+//    exclude 'com.umeng.analytics'
+//    exclude 'com.tencent.bugly'
+//    exclude 'com.alipay.sdk'
+//    exclude 'com.tencent.mm.opensdk'
+//    exclude 'cn.jpush'
+//    exclude 'cn.jcore'
+//    exclude 'versions.9'
+//    enabled true    //aop开关
+//}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation rootProject.ext.androidDependencies.kotlinStdlib
