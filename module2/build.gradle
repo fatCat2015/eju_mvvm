@@ -77,7 +77,7 @@ dependencies {
     implementation rootProject.ext.dependencies.aRouter
     kapt rootProject.ext.dependencies.aRouterCompiler
 
-    implementation project(path: ':architecture')
+    implementation project(path: ':common')
 
 
 }

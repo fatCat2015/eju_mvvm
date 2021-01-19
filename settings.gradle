@@ -2,7 +2,7 @@ include ':module2'
 include ':app'
 include ':aop'
 include ':cache'
-include ':architecture'
+include ':common'
 include ':service'
 include ':module1'
 rootProject.name = "demo"
