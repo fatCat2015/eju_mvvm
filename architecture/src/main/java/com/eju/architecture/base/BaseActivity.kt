@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
+import com.alibaba.android.arouter.launcher.ARouter
 import com.eju.architecture.getViewModel
 import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.observe
@@ -59,6 +60,7 @@ abstract class BaseActivity<VM:BaseViewModel<*>,B:ViewDataBinding>(@LayoutRes la
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ARouter.getInstance().inject(this)
         setListeners()
         initData(savedInstanceState)
         NetworkManager.observe(this){ connected,state->

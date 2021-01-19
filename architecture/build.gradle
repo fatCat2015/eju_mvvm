@@ -3,6 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+}
+
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -75,5 +81,6 @@ dependencies {
     api project(path: ':cache')
 
     implementation rootProject.ext.dependencies.aRouter
+    kapt rootProject.ext.dependencies.aRouterCompiler
 
 }

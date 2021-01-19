@@ -1,14 +1,18 @@
 package com.eju.demo.view
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.alibaba.android.arouter.launcher.ARouter
 import com.eju.architecture.base.BasePagingLazyLoadFragment
 import com.eju.architecture.dialog.BaseDialog
+import com.eju.architecture.router.RouterPath
+import com.eju.architecture.router.navigation
 import com.eju.demo.R
 import com.eju.demo.TestAdapter
 import com.eju.demo.databinding.FragmentDemoBinding
@@ -31,6 +35,9 @@ class DemoFragment:BasePagingLazyLoadFragment<FragmentViewModel,FragmentDemoBind
 
     override fun lazyLoad(savedInstanceState: Bundle?) {
         tvDetail.text=arguments?.getInt("index")?.toString()
+        tvDetail.setOnClickListener {
+            ARouter.getInstance().build(RouterPath.Module1.multi).withString("bb","sck").navigation(this,60)
+        }
         bt0.setOnClickListener {
             viewModel.refresh()
         }
@@ -40,6 +47,11 @@ class DemoFragment:BasePagingLazyLoadFragment<FragmentViewModel,FragmentDemoBind
         }
         rv.adapter=TestAdapter(viewModel.adapterList).also { adapter=it }
         bt0.performClick()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.i("sck220", "onActivityResult: ${requestCode} ${resultCode} ${data?.getIntExtra("aa",-1)}")
     }
 
     override fun finishRefresh() {

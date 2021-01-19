@@ -9,6 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.alibaba.android.arouter.launcher.ARouter
 import com.eju.architecture.getViewModel
 import com.eju.architecture.observe
 import com.eju.architecture.util.NetworkManager
@@ -55,6 +56,11 @@ abstract class BaseFragment <VM:BaseViewModel<*>,B:ViewDataBinding>(@LayoutRes l
         }
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ARouter.getInstance().inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

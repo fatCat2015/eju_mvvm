@@ -18,8 +18,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.eju.architecture.base.BaseActivity
 import com.eju.architecture.observe
+import com.eju.architecture.router.RouterPath
 import com.eju.architecture.setUpWithViewPager2
 import com.eju.architecture.widget.PaletteHelper
 import com.eju.architecture.widget.SimpleFragmentAdapter2
@@ -36,6 +38,7 @@ import kotlinx.coroutines.flow.map
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class TestActivity : BaseActivity<TestViewModel,ActivityTest2Binding>(R.layout.activity_test2) {
 
@@ -58,6 +61,7 @@ class TestActivity : BaseActivity<TestViewModel,ActivityTest2Binding>(R.layout.a
         viewPager.adapter=SimpleFragmentAdapter2(fragment,this)
         viewPager.offscreenPageLimit=fragment.size-1
         tabLayout.setUpWithViewPager2(viewPager, titles)
+
     }
 
 

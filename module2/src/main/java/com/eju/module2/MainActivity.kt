@@ -6,26 +6,23 @@ import androidx.lifecycle.ViewModel
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.eju.architecture.base.BaseActivity
+import com.eju.architecture.base.SimpleActivity
 import com.eju.architecture.router.RouterPath
 import kotlinx.android.synthetic.main.activity_main1.*
 
 @Route(path = RouterPath.Module2.main)
-class MainActivity : AppCompatActivity() {
+class MainActivity : SimpleActivity(R.layout.activity_main1) {
 
     @Autowired
     @JvmField
     var name:String? = null
+    override fun setListeners() {
+    }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-
-
-
-        ARouter.getInstance().inject(this)
-        setContentView(R.layout.activity_main1)
+    override fun initData(savedInstanceState: Bundle?) {
         tv2.text="${tv2.text}\n${name}\n${intent.getStringExtra(ARouter.RAW_URI)}"
     }
+
+
 }

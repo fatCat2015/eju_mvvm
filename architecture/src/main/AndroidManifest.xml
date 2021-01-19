@@ -21,7 +21,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".router.SchemeFilterActivity"
+        <activity android:name=".router.PageRouterActivity"
             android:screenOrientation="portrait"
             >
             <!-- Scheme -->
