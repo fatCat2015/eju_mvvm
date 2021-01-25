@@ -1,4 +1,4 @@
-package com.eju.architecture.util
+package com.eju.architecture.widget
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -6,7 +6,6 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.eju.architecture.application
 import com.eju.architecture.livedata.UILiveData
@@ -19,7 +18,8 @@ object NetworkManager {
 
     var networkState = NetworkState.NONE
 
-    fun networkConnected()=networkState!=NetworkState.NONE
+    fun networkConnected()=
+        networkState != NetworkState.NONE
 
     fun init() {
         val connectivityManager= application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -30,14 +30,22 @@ object NetworkManager {
 //                Timber.i( "onAvailable: ${Thread.currentThread().id}")
                 val networkCapabilities=connectivityManager.getNetworkCapabilities(network)
                 networkCapabilities?.let { networkCapabilities->
-                    onNetworkStateChanged(getConnectedNetworkState(networkCapabilities))
-                }?: onNetworkStateChanged(NetworkState.OTHER)
+                    onNetworkStateChanged(
+                        getConnectedNetworkState(
+                            networkCapabilities
+                        )
+                    )
+                }?: onNetworkStateChanged(
+                    NetworkState.OTHER
+                )
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
 //                Timber.i( "onLost: ${Thread.currentThread().id}")
-                onNetworkStateChanged(NetworkState.NONE)
+                onNetworkStateChanged(
+                    NetworkState.NONE
+                )
             }
 
             override fun onCapabilitiesChanged(
@@ -46,7 +54,11 @@ object NetworkManager {
             ) {
                 super.onCapabilitiesChanged(network, networkCapabilities)
 //                Timber.i( "onCapabilitiesChanged:  ${Thread.currentThread().id}")
-                onNetworkStateChanged(getConnectedNetworkState(networkCapabilities))
+                onNetworkStateChanged(
+                    getConnectedNetworkState(
+                        networkCapabilities
+                    )
+                )
             }
         }
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
@@ -56,11 +68,11 @@ object NetworkManager {
         }
     }
 
-    private fun getConnectedNetworkState(networkCapabilities: NetworkCapabilities):NetworkState{
+    private fun getConnectedNetworkState(networkCapabilities: NetworkCapabilities): NetworkState {
         return when{
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ->NetworkState.WIFI
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ->NetworkState.MOBILE
-            else ->NetworkState.OTHER
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> NetworkState.WIFI
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> NetworkState.MOBILE
+            else -> NetworkState.OTHER
         }
     }
 
@@ -68,14 +80,15 @@ object NetworkManager {
 
     private fun onNetworkStateChanged(newNetworkState: NetworkState){
         if(newNetworkState!= networkState){
-            val oldNetworkState= networkState
+            val oldNetworkState=
+                networkState
             Timber.i("onNetworkStateChanged ${oldNetworkState}  ${newNetworkState}")
-            this.networkState=newNetworkState
-            this.networkStateLiveData.changeValue(newNetworkState)
+            networkState =newNetworkState
+            networkStateLiveData.changeValue(newNetworkState)
         }
     }
 
-    fun observe(lifecycleOwner: LifecycleOwner,onNetworkStateChanged:(Boolean,NetworkState)->Unit){
+    fun observe(lifecycleOwner: LifecycleOwner,onNetworkStateChanged:(Boolean, NetworkState)->Unit){
         lifecycleOwner.observe(networkStateLiveData){
             onNetworkStateChanged.invoke(networkConnected(),it)
         }

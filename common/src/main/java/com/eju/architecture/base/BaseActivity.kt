@@ -1,24 +1,18 @@
 package com.eju.architecture.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
-import android.widget.Toast
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import com.alibaba.android.arouter.launcher.ARouter
 import com.eju.architecture.getViewModel
-import com.eju.architecture.livedata.UILiveData
 import com.eju.architecture.observe
-import com.eju.architecture.util.NetworkManager
-import com.eju.architecture.util.NetworkState
+import com.eju.architecture.widget.NetworkManager
+import com.eju.architecture.widget.NetworkState
 import com.eju.architecture.util.ReflectUtil
 import com.eju.architecture.util.SoftInputUtils
-import timber.log.Timber
 import java.lang.Exception
 import java.lang.NullPointerException
-import java.lang.reflect.ParameterizedType
 
 abstract class BaseActivity<VM:BaseViewModel<*>,B:ViewDataBinding>(@LayoutRes layoutId:Int):DataBindingActivity<B>(layoutId), IBaseView {
 
@@ -63,7 +57,7 @@ abstract class BaseActivity<VM:BaseViewModel<*>,B:ViewDataBinding>(@LayoutRes la
         ARouter.getInstance().inject(this)
         setListeners()
         initData(savedInstanceState)
-        NetworkManager.observe(this){ connected,state->
+        NetworkManager.observe(this){ connected, state->
             onNetworkStateChanged(connected,state)
         }
     }

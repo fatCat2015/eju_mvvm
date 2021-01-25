@@ -1,6 +1,6 @@
 package com.eju.architecture.base
 
-import com.eju.architecture.util.NetworkManager
+import com.eju.architecture.widget.NetworkManager
 import com.eju.cache.CacheConfig
 import com.eju.cache.CacheStrategy
 import com.eju.service.BaseResult
@@ -22,7 +22,8 @@ open class BaseRepository {
     }
 
     protected fun <T> firstCacheThenRemote(cacheConfig: CacheConfig= CacheConfig.DEFAULT, block:()-> Call<BaseResult<T>>):Flow<T>{
-        return ServiceCache.getData(NetworkManager.networkConnected(), cacheConfig,
+        return ServiceCache.getData(
+            NetworkManager.networkConnected(), cacheConfig,
             CacheStrategy.FIRST_CACHE_THEN_REMOTE,block)
     }
 
@@ -43,7 +44,8 @@ open class BaseRepository {
 
 
     protected fun <T> firstCacheThenRemote(key:String,cacheConfig: CacheConfig= CacheConfig.DEFAULT, block:suspend ()-> BaseResult<T>):Flow<T>{
-        return ServiceCache.getData(key,NetworkManager.networkConnected(), cacheConfig,
+        return ServiceCache.getData(key,
+            NetworkManager.networkConnected(), cacheConfig,
             CacheStrategy.FIRST_CACHE_THEN_REMOTE,block)
     }
 
@@ -51,7 +53,8 @@ open class BaseRepository {
      * @param cacheStrategy 除了CacheStrategy.FIRST_CACHE_THEN_REMOTE (使用firstCacheThenRemote())
      */
     protected suspend fun <T> fromCache(key:String,cacheConfig: CacheConfig, cacheStrategy: CacheStrategy, block:suspend ()-> BaseResult<T>):T{
-        return ServiceCache.getData(key,NetworkManager.networkConnected(), cacheConfig,cacheStrategy,block).first()
+        return ServiceCache.getData(key,
+            NetworkManager.networkConnected(), cacheConfig,cacheStrategy,block).first()
     }
 
     protected suspend fun <T> fromCache(key:String,block:suspend ()-> BaseResult<T>):T{

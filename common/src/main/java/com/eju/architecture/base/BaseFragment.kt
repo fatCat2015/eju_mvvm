@@ -1,21 +1,15 @@
 package com.eju.architecture.base
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.launcher.ARouter
 import com.eju.architecture.getViewModel
 import com.eju.architecture.observe
-import com.eju.architecture.util.NetworkManager
-import com.eju.architecture.util.NetworkState
+import com.eju.architecture.widget.NetworkManager
+import com.eju.architecture.widget.NetworkState
 import com.eju.architecture.util.ReflectUtil
-import com.eju.architecture.util.SoftInputUtils
 import java.lang.Exception
 import java.lang.NullPointerException
 

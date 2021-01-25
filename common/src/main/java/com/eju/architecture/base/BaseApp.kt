@@ -4,12 +4,12 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import com.alibaba.android.arouter.launcher.ARouter
+import com.eju.architecture.AppActivityManager
 import com.eju.architecture.AppStateTracker
 import com.eju.architecture.BuildConfig
 import com.eju.architecture.currentProcessName
-import com.eju.architecture.util.NetworkManager
+import com.eju.architecture.widget.NetworkManager
 import com.eju.service.ServiceUtil
-import com.imyyq.mvvm.app.AppActivityManager
 import timber.log.Timber
 
 open class BaseApp:Application() {

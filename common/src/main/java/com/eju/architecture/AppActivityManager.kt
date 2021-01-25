@@ -1,4 +1,4 @@
-package com.imyyq.mvvm.app
+package com.eju.architecture
 
 import android.app.Activity
 
